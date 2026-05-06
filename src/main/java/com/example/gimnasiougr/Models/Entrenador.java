@@ -35,7 +35,7 @@ public class Entrenador {
     @NotBlank(message = "El correo no puede estar vacío")
     @Email(message = "El formato del correo no es válido")
     @Size(max = 100, message = "El correo no puede exceder los 100 caracteres")
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, length = 100)
     private String correo;
 
     @NotBlank(message = "La contraseña no puede estar vacía")

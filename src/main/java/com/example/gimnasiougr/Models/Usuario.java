@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @Entity
 public class Usuario {
     @Id
@@ -34,7 +34,7 @@ public class Usuario {
     @NotBlank(message = "El correo no puede estar vacío")
     @Email(message = "El formato del correo no es válido")
     @Size(max = 100, message = "El correo no puede exceder los 100 caracteres")
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, length = 100)
     private String correo;
 
     @Size(max = 255, message = "La dirección no puede exceder los 255 caracteres")
