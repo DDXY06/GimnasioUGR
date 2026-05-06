@@ -11,17 +11,17 @@ import java.time.LocalDateTime;
 public class CupoDTO {
     private Long id;
 
-    @NotNull(message = "El ID del usuario es obligatorio")
+    @NotNull(message = "Introduzca un ID de usuario")
     private Long usuarioId;
 
     private String usuarioNombre;
 
-    @NotNull(message = "El ID de la clase es obligatorio")
+    @NotNull(message = "Introduzca un ID de clase")
     private Long claseId;
 
     private Long bonoId;
 
-    @NotNull(message = "El estado es obligatorio")
+    @NotNull(message = "Introduzca un estado")
     private Estado estado;
 
     private LocalDateTime fechaUso;

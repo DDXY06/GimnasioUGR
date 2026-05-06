@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,26 +18,24 @@ import java.time.LocalDate;
 public class Bono {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
 
-    @NotNull(message = "El usuario es obligatorio")
-    @ToString.Exclude
+    @NotNull(message = "Introduzca un usuario")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
-    @NotNull(message = "El tipo de bono es obligatorio")
+    @OneToMany(mappedBy = "bono")
+    List<Cupo> cuposUsados;
+
+    @NotNull(message = "Introduzca un tipo de bono")
     @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
     private TipoClase tipo;
 
-    @NotNull(message = "El número máximo de cupos es obligatorio")
+    @NotNull(message = "Introduzca un número máximo de cupos")
     @Positive(message = "El número máximo de cupos debe ser positivo")
-    @Column(name = "maxCupos", nullable = false)
     private Integer maxCupos;
 
-    @NotNull(message = "La fecha de compra es obligatoria")
-    @Column(name = "fechaCompra", nullable = false)
-    private LocalDate fechaCompra;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaCompra =  LocalDate.now();
 }

@@ -15,22 +15,15 @@ import lombok.*;
 public class Administrador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
 
-    @NotBlank(message = "El nombre no puede estar vacío")
-    @Size(max = 100, message = "El nombre no puede exceder los 100 caracteres")
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "Introduzca un nombre")
     private String nombre;
 
-    @NotBlank(message = "El correo no puede estar vacío")
+    @NotBlank(message = "Introduzca un correo")
     @Email(message = "El formato del correo no es válido")
-    @Size(max = 100, message = "El correo no puede exceder los 100 caracteres")
-    @Column(nullable = false, length = 100)
     private String correo;
 
-    @NotBlank(message = "La contraseña no puede estar vacía")
-    @Size(max = 255, message = "La contraseña no puede exceder los 255 caracteres")
-    @Column(nullable = false, length = 255)
+    @NotBlank(message = "Introduzca una contraseña")
     private String contrasenia;
 }

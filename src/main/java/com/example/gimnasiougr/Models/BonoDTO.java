@@ -3,6 +3,8 @@ package com.example.gimnasiougr.Models;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 @Getter
@@ -12,18 +14,19 @@ import java.time.LocalDate;
 public class BonoDTO {
     private Long id;
 
-    @NotNull(message = "El ID del usuario es obligatorio")
+    @NotNull(message = "Introduzca un ID de usuario")
     private Long usuarioId;
 
     private String usuarioNombre;
 
-    @NotNull(message = "El tipo de bono es obligatorio")
+    @NotNull(message = "Introduzca un tipo de bono")
     private TipoClase tipo;
 
-    @NotNull(message = "El número máximo de cupos es obligatorio")
+    @NotNull(message = "Introduzca un número máximo de cupos")
     @Positive(message = "El número máximo de cupos debe ser positivo")
     private Integer maxCupos;
 
-    @NotNull(message = "La fecha de compra es obligatoria")
-    private LocalDate fechaCompra;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Introduzca una fecha de compra")
+    private LocalDate fechaCompra =   LocalDate.now();
 }

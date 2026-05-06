@@ -11,18 +11,18 @@ import java.time.LocalDateTime;
 public class SolicitudCambioDTO {
     private Long id;
 
-    @NotNull(message = "El ID del usuario es obligatorio")
+    @NotNull(message = "Introduzca un ID de usuario")
     private Long usuarioId;
 
     private String usuarioNombre;
 
-    @NotNull(message = "El ID del cupo es obligatorio")
+    @NotNull(message = "Introduzca un ID de cupo")
     private Long cupoId;
 
-    @NotNull(message = "El ID de la clase de cambio es obligatorio")
+    @NotNull(message = "Introduzca un ID de clase de cambio")
     private Long claseCambioId;
 
-    @NotNull(message = "El estado es obligatorio")
+    @NotNull(message = "Introduzca un estado")
     private Estado estado;
 
     private LocalDateTime fechaSolicitud;

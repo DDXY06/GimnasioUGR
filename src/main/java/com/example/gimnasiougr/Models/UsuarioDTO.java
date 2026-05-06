@@ -12,22 +12,21 @@ import lombok.*;
 public class UsuarioDTO {
     private Long id;
 
-    @NotBlank(message = "El nombre no puede estar vacío")
-    @Size(max = 100, message = "El nombre no puede exceder los 100 caracteres")
+    @NotBlank(message = "Introduzca un nombre")
     private String nombre;
 
-    @NotBlank(message = "El DNI no puede estar vacío")
-    @Size(max = 8, message = "El DNI no puede exceder los 8 caracteres")
+    @NotBlank(message = "Introduzca un DNI")
     private String dni;
 
     @Size(max = 20, message = "El teléfono no puede exceder los 20 caracteres")
     private String telf;
 
-    @NotBlank(message = "El correo no puede estar vacío")
+    @NotBlank(message = "Introduzca un correo")
     @Email(message = "El formato del correo no es válido")
-    @Size(max = 100, message = "El correo no puede exceder los 100 caracteres")
     private String correo;
 
-    @Size(max = 255, message = "La dirección no puede exceder los 255 caracteres")
     private String direccion;
+
+    @NotBlank(message = "Introduzca una contraseña")
+    private String contrasenia;
 }

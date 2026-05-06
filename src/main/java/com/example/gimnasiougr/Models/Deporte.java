@@ -14,11 +14,8 @@ import lombok.*;
 public class Deporte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
 
-    @NotBlank(message = "El nombre no puede estar vacío")
-    @Size(max = 100, message = "El nombre no puede exceder los 100 caracteres")
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "Introduzca un nombre")
     private String nombre;
 }

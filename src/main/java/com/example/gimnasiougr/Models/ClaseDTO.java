@@ -12,27 +12,28 @@ import java.time.LocalTime;
 public class ClaseDTO {
     private Long id;
 
-    @NotNull(message = "El ID del deporte es obligatorio")
+    @NotNull(message = "Introduzca un ID de deporte")
     private Long deporteId;
 
     private String deporteNombre;
 
-    @NotNull(message = "El ID del entrenador es obligatorio")
+    @NotNull(message = "Introduzca un ID de entrenador")
     private Long entrenadorId;
 
     private String entrenadorNombre;
 
-    @NotNull(message = "El tipo de clase es obligatorio")
+    @NotNull(message = "Introduzca un tipo de clase")
     private TipoClase tipo;
 
-    @NotNull(message = "El estado es obligatorio")
+    @NotNull(message = "Introduzca un estado")
     private Estado estado;
 
-    @NotNull(message = "La fecha es obligatoria")
+    @NotNull(message = "Introduzca una fecha")
     private LocalDate fecha;
 
-    @NotNull(message = "La hora es obligatoria")
+    @NotNull(message = "Introduzca una hora")
     private LocalTime hora;
 
+    @NotNull(message = "Introduzca un número máximo de cupos")
     private Integer maxCupos;
 }

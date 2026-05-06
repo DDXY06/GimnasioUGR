@@ -14,32 +14,26 @@ import java.time.LocalDateTime;
 public class SolicitudCambio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
 
-    @NotNull(message = "El usuario es obligatorio")
-    @ToString.Exclude
+    @NotNull(message = "Introduzca un usuario")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
-    @NotNull(message = "El cupo es obligatorio")
-    @ToString.Exclude
+    @NotNull(message = "Introduzca un cupo")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idCupo", nullable = false)
     private Cupo cupo;
 
-    @NotNull(message = "La clase de cambio es obligatoria")
-    @ToString.Exclude
+    @NotNull(message = "Introduzca una clase de cambio")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idClaseCambio", nullable = false)
     private Clase claseCambio;
 
-    @NotNull(message = "El estado es obligatorio")
+    @NotNull(message = "Introduzca un estado")
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
     private Estado estado;
 
-    @Column(name = "fechaSolicitud", insertable = false, updatable = false)
     private LocalDateTime fechaSolicitud;
 }
