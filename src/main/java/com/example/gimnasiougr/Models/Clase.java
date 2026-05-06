@@ -3,8 +3,11 @@ package com.example.gimnasiougr.Models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,39 +18,37 @@ import java.time.LocalTime;
 public class Clase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
 
-    @NotNull(message = "El deporte es obligatorio")
-    @ToString.Exclude
+    @NotNull(message = "Introduzca un deporte")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idDeporte", nullable = false)
+    @JoinColumn(name = "idDeporte")
     private Deporte deporte;
 
-    @NotNull(message = "El entrenador es obligatorio")
-    @ToString.Exclude
+    @OneToMany(mappedBy = "clase")
+    List<Cupo> cupos;
+
+    @NotNull(message = "Introduzca un entrenador")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idEntrenador", nullable = false)
+    @JoinColumn(name = "idEntrenador")
     private Entrenador entrenador;
 
-    @NotNull(message = "El tipo de clase es obligatorio")
+    @NotNull(message = "Introduzca un tipo de clase")
     @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
     private TipoClase tipo;
 
-    @NotNull(message = "El estado es obligatorio")
+    @NotNull(message = "Introduzca un estado")
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
     private Estado estado;
 
-    @NotNull(message = "La fecha es obligatoria")
-    @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Introduzca una fecha")
     private LocalDate fecha;
 
-    @NotNull(message = "La hora es obligatoria")
-    @Column(nullable = false)
+    @DateTimeFormat(pattern = "HH:mm")
+    @NotNull(message = "Introduzca una hora")
     private LocalTime hora;
 
-    @Column(name = "maxCupos")
+    @NotNull(message = "Introduzca un número máximo de cupos")
     private Integer maxCupos;
 }
