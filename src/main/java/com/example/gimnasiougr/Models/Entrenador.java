@@ -20,7 +20,7 @@ public class Entrenador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "entrenador")
+    @OneToMany(mappedBy = "entrenador", cascade = CascadeType.ALL)
     List<Clase> clases;
 
     @NotNull

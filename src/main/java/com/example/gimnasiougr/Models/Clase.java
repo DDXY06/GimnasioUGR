@@ -25,7 +25,7 @@ public class Clase {
     @JoinColumn(name = "idDeporte")
     private Deporte deporte;
 
-    @OneToMany(mappedBy = "clase")
+    @OneToMany(mappedBy = "clase", cascade = CascadeType.ALL)
     List<Cupo> cupos;
 
     @NotNull(message = "Introduzca un entrenador")
