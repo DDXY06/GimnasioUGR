@@ -19,12 +19,6 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    List<Cupo> cupos;
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    List<Bono> bonos;
-
     @NotBlank(message = "Introduzca un nombre")
     private String nombre;
 

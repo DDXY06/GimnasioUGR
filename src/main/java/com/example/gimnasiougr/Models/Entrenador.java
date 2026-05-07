@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,9 +17,6 @@ public class Entrenador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToMany(mappedBy = "entrenador", cascade = CascadeType.ALL)
-    List<Clase> clases;
 
     @NotNull
     @NotBlank(message = "Introduzca un nombre")

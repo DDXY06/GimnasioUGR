@@ -19,6 +19,7 @@ public class CupoDTO {
     @NotNull(message = "Introduzca un ID de clase")
     private Long claseId;
 
+    @NotNull(message = "Introduzca unn ID de bono")
     private Long bonoId;
 
     @NotNull(message = "Introduzca un estado")
