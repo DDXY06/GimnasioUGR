@@ -36,4 +36,15 @@ public class Usuario {
 
     @NotBlank(message = "Introduzca una contraseña")
     private String contrasenia;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Bono> bonos;
+
+    public List<Bono> getBonos() {
+        return bonos;
+    }
+
+    public void setBonos(List<Bono> bonos) {
+        this.bonos = bonos;
+    }
 }
