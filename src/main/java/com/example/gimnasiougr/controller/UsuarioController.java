@@ -25,15 +25,12 @@ public class UsuarioController {
     }
 
     @PostMapping("/guardar")
-    public String guardarUsuario(@ModelAttribute("usuario") Usuario usuario, Model model) {
-        try {
-            usuarioService.guardar(usuario);
-            return "redirect:/admin/usuarios";
-
-        } catch (Exception e) {
-            model.addAttribute("error", "No se ha podido guardar. Comprueba que los datos sean correctos.");
-            return "admin/usuario-form";
+    public String guardarUsuario(@ModelAttribute("usuario") Usuario usuario) {
+        if (usuario.getRol() == null || usuario.getRol().isEmpty()) {
+            usuario.setRol("CLIENTE");
         }
+        usuarioService.guardar(usuario);
+        return "redirect:/admin/usuarios";
     }
 
     @GetMapping("/editar/{id}")

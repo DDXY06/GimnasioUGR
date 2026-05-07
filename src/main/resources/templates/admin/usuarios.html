@@ -1,80 +1,124 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Gestión de Usuarios - Gimnasio UGR</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Gestión de Usuarios - UGRFit</title>
+
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
-<body class="bg-light">
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Gestión de Usuarios</h2>
-        <a th:href="@{/admin/usuarios/nuevo}" class="btn btn-primary">Añadir Nuevo Usuario</a>
-    </div>
+<body id="page-top" class="bg-light">
 
-    <div class="card shadow mb-4">
-        <div class="card-body">
-            <form th:action="@{/admin/usuarios}" method="get" class="row g-3 align-items-center">
-
-                <div class="col-auto">
-                    <label class="col-form-label">Buscar por:</label>
-                </div>
-
-                <div class="col-auto">
-                    <select name="tipoFiltro" class="form-select">
-                        <option value="nombre" th:selected="${tipoFiltro == 'nombre'}">Nombre</option>
-                        <option value="dni" th:selected="${tipoFiltro == 'dni'}">DNI</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <input type="text" name="textoBusqueda" class="form-control"
-                           placeholder="Escribe aquí..." th:value="${textoBusqueda}">
-                </div>
-
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-secondary">Buscar</button>
-                    <a th:href="@{/admin/usuarios}" class="btn btn-outline-secondary">Limpiar</a>
-                </div>
-
-            </form>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand text-primary" th:href="@{/}">UGRFit | Panel de Administración</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item"><a class="nav-link text-dark" th:href="@{/admin/usuarios}">Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link text-dark" th:href="@{/}">Volver a la Web</a></li>
+            </ul>
         </div>
     </div>
+</nav>
 
-    <div class="card shadow">
-        <div class="card-body">
-            <table class="table table-hover">
-                <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>DNI</th>
-                    <th>Correo</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="u : ${usuarios}">
-                    <td th:text="${u.id}"></td>
-                    <td th:text="${u.nombre}"></td>
-                    <td th:text="${u.dni}"></td>
-                    <td th:text="${u.correo}"></td>
-                    <td>
-                        <a th:href="@{/admin/usuarios/{id}/bonos(id=${u.id})}" class="btn btn-sm btn-info text-white">Ver Detalles/Bonos</a>
+<section class="page-section mt-5 pt-5">
+    <div class="container px-4 px-lg-5">
 
-                        <a th:href="@{/admin/usuarios/editar/{id}(id=${u.id})}" class="btn btn-sm btn-warning">Editar</a>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mt-0">Gestión de Usuarios</h2>
+            <a th:href="@{/admin/usuarios/nuevo}" class="btn btn-primary rounded-pill px-4">
+                <i class="bi-person-plus me-2"></i>Añadir Nuevo
+            </a>
+        </div>
+        <hr class="divider divider-start mb-5" style="max-width: 5rem; margin-left: 0;" />
 
-                        <a th:href="@{/admin/usuarios/eliminar/{id}(id=${u.id})}"
-                           class="btn btn-sm btn-danger"
-                           onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario? Todo su historial se borrará.');">
-                            Eliminar
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="card border-0 shadow-sm mb-5 rounded-4">
+            <div class="card-body p-4">
+                <form th:action="@{/admin/usuarios}" method="get" class="row g-3 align-items-center">
+                    <div class="col-auto">
+                        <label class="col-form-label fw-bold text-muted"><i class="bi-search me-2"></i>Buscar por:</label>
+                    </div>
+                    <div class="col-auto">
+                        <select name="tipoFiltro" class="form-select border-0 bg-light">
+                            <option value="nombre" th:selected="${tipoFiltro == 'nombre'}">Nombre</option>
+                            <option value="dni" th:selected="${tipoFiltro == 'dni'}">DNI</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" name="textoBusqueda" class="form-control border-0 bg-light"
+                               placeholder="Escribe aquí para buscar..." th:value="${textoBusqueda}">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary px-4">Buscar</button>
+                        <a th:href="@{/admin/usuarios}" class="btn btn-outline-secondary px-4">Limpiar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow rounded-4 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-dark">
+                    <tr>
+                        <th class="py-3 px-4">ID</th>
+                        <th class="py-3">Nombre</th>
+                        <th class="py-3">DNI</th>
+                        <th class="py-3">Correo</th>
+                        <th class="py-3 text-center">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="u : ${usuarios}">
+                        <td class="px-4 fw-bold text-muted" th:text="${u.id}"></td>
+                        <td th:text="${u.nombre}"></td>
+                        <td th:text="${u.dni}"></td>
+                        <td th:text="${u.correo}"></td>
+                        <td class="text-center">
+                            <a th:href="@{/admin/usuarios/{id}/bonos(id=${u.id})}" class="btn btn-sm btn-info text-white rounded-pill" title="Ver Detalles">
+                                <i class="bi-eye"></i> Detalles
+                            </a>
+                            <a th:href="@{/admin/usuarios/editar/{id}(id=${u.id})}" class="btn btn-sm btn-warning text-dark rounded-pill" title="Editar">
+                                <i class="bi-pencil"></i>
+                            </a>
+                            <a th:href="@{/admin/usuarios/eliminar/{id}(id=${u.id})}"
+                               class="btn btn-sm btn-danger rounded-pill" title="Eliminar"
+                               onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario? Todo su historial se borrará.');">
+                                <i class="bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr th:if="${usuarios.empty}">
+                        <td colspan="5" class="text-center py-4 text-muted">No se encontraron usuarios.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<footer class="bg-white py-5 mt-auto">
+    <div class="container px-4 px-lg-5">
+        <div class="row align-items-center justify-content-center text-center">
+            <div class="col-12 mb-3">
+                <img th:src="@{/assets/img/UGR-Logo.png}" alt="Logo Universidad de Granada" style="max-height: 50px;" class="img-fluid opacity-75">
+            </div>
+            <div class="col-12">
+                <div class="small text-muted">Copyright &copy; 2026 - UGRFit Administración</div>
+            </div>
         </div>
     </div>
-</div>
+</footer>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
 </body>
 </html>
