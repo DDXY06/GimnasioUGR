@@ -22,10 +22,10 @@ public class Bono {
 
     @NotNull(message = "Introduzca un usuario")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idUsuario", nullable = false)
-    private Usuario usuario;
+    @JoinColumn(name = "idCliente", nullable = false)
+    private Cliente cliente;
 
-    @OneToMany(mappedBy = "bono", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cupo", cascade = CascadeType.ALL)
     List<Cupo> cuposUsados;
 
     @NotNull(message = "Introduzca un tipo de bono")

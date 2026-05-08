@@ -2,6 +2,8 @@ package com.example.gimnasiougr.Models;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,8 +16,6 @@ public class CupoDTO {
     @NotNull(message = "Introduzca un ID de usuario")
     private Long usuarioId;
 
-    private String usuarioNombre;
-
     @NotNull(message = "Introduzca un ID de clase")
     private Long claseId;
 
@@ -25,5 +25,6 @@ public class CupoDTO {
     @NotNull(message = "Introduzca un estado")
     private Estado estado;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime fechaUso;
 }

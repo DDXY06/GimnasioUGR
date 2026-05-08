@@ -19,7 +19,7 @@ public class Cupo {
     @NotNull(message = "Introduzca un usuario")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idUsuario", nullable = false)
-    private Usuario usuario;
+    private Cliente usuario;
 
     @NotNull(message = "Introduzca una clase")
     @ManyToOne(fetch = FetchType.LAZY)

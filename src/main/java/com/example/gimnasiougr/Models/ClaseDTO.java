@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,15 +13,13 @@ import java.time.LocalTime;
 public class ClaseDTO {
     private Long id;
 
+    private List<Long> cuposId;
+
     @NotNull(message = "Introduzca un ID de deporte")
     private Long deporteId;
 
-    private String deporteNombre;
-
     @NotNull(message = "Introduzca un ID de entrenador")
     private Long entrenadorId;
-
-    private String entrenadorNombre;
 
     @NotNull(message = "Introduzca un tipo de clase")
     private TipoClase tipo;
