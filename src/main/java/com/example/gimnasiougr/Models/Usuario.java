@@ -3,6 +3,7 @@ package com.example.gimnasiougr.Models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -23,7 +24,7 @@ public class Usuario {
     @NotBlank(message = "Introduzca una contraseña")
     private String contrasenia;
 
-    @NotBlank
+    @NotNull(message = "El rol es obligatorio")
     @Enumerated(EnumType.ORDINAL)
     private TipoUsuario rol;
 }

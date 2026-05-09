@@ -1,10 +1,8 @@
 package com.example.gimnasiougr.Services;
 
-import com.example.gimnasiougr.Models.BonoDTO;
-import com.example.gimnasiougr.Models.Cliente;
-import com.example.gimnasiougr.Models.ClienteDTO;
-import com.example.gimnasiougr.Models.Usuario;
+import com.example.gimnasiougr.Models.*;
 import com.example.gimnasiougr.Repositories.ClienteRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,13 +23,12 @@ public class ClienteService {
         dto.setId(cliente.getId());
         if (cliente.getUsuario() != null) {
             dto.setUsuarioId(cliente.getUsuario().getId());
+            dto.setCorreo(cliente.getUsuario().getCorreo());
         }
         dto.setNombre(cliente.getNombre());
         dto.setDni(cliente.getDni());
         dto.setTelf(cliente.getTelf());
-        dto.setCorreo(cliente.getCorreo());
         dto.setDireccion(cliente.getDireccion());
-        dto.setContrasenia(cliente.getContrasenia());
 
         if (cliente.getBonos() != null) {
             List<BonoDTO> bonoDTOs = cliente.getBonos().stream().map(bono -> {
@@ -51,23 +48,36 @@ public class ClienteService {
         return dto;
     }
 
-    public Cliente mapToEntity(ClienteDTO dto) {
-        if (dto == null) return null;
+    private Cliente mapToEntity(ClienteDTO dto) {
         Cliente cliente = new Cliente();
-        cliente.setId(dto.getId());
-        cliente.setNombre(dto.getNombre());
-        cliente.setDni(dto.getDni());
-        cliente.setTelf(dto.getTelf());
-        cliente.setCorreo(dto.getCorreo());
-        cliente.setDireccion(dto.getDireccion());
-        cliente.setContrasenia(dto.getContrasenia());
 
-        // La asignación de la entidad Usuario se hace con una referencia básica
-        // Las relaciones más complejas deberían ser obtenidas de BD.
-        if (dto.getUsuarioId() != null) {
+        // Si el DTO trae un ID, significa que estamos editando un cliente existente.
+        // Lo buscamos en la base de datos para no perder sus datos.
+        if (dto.getId() != null) {
+            cliente = clienteRepository.findById(dto.getId()).orElse(new Cliente());
+        }
+
+        // Asignamos los campos que SÍ existen en tu modelo
+        cliente.setDni(dto.getDni());
+        cliente.setNombre(dto.getNombre());
+        cliente.setTelf(dto.getTelf());          // Aquí es telf, no telefono
+        cliente.setDireccion(dto.getDireccion()); // Añadimos direccion
+
+        // Si el cliente no tiene un usuario asignado (es nuevo), lo creamos
+        if (cliente.getUsuario() == null) {
             Usuario usuario = new Usuario();
-            usuario.setId(dto.getUsuarioId());
+            usuario.setRol(TipoUsuario.CLIENTE);
             cliente.setUsuario(usuario);
+        }
+
+        // Asignamos el correo y contraseña al Usuario
+        if (dto.getCorreo() != null) {
+            cliente.getUsuario().setCorreo(dto.getCorreo());
+        }
+
+        // Solo actualizamos la contraseña si nos enviaron una nueva
+        if (dto.getContrasenia() != null && !dto.getContrasenia().isEmpty()) {
+            cliente.getUsuario().setContrasenia(dto.getContrasenia());
         }
 
         return cliente;
@@ -90,7 +100,9 @@ public class ClienteService {
     }
 
     public void eliminar(Long id) {
-        clienteRepository.deleteById(id);
+        clienteRepository.findById(id).ifPresent(cliente -> {
+            clienteRepository.delete(cliente);
+        });
     }
 
     public List<ClienteDTO> buscarPorFiltro(String tipoFiltro, String textoBusqueda) {

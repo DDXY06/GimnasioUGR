@@ -19,7 +19,7 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
@@ -35,12 +35,6 @@ public class Cliente {
     @Size(max = 20, message = "El teléfono no puede exceder los 20 caracteres")
     private String telf;
 
-    @NotBlank(message = "Introduzca un correo")
-    @Email(message = "El formato del correo no es válido")
-    private String correo;
-
     private String direccion;
 
-    @NotBlank(message = "Introduzca una contraseña")
-    private String contrasenia;
 }

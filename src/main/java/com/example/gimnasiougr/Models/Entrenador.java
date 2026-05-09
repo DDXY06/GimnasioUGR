@@ -33,11 +33,4 @@ public class Entrenador {
     @Size(max = 20, message = "El teléfono no puede exceder los 20 caracteres")
     private String telf;
 
-    @NotNull
-    @NotBlank(message = "Introduzca un correo")
-    @Email(message = "El formato del correo no es válido")
-    private String correo;
-
-    @NotBlank(message = "Introduzca una contraseña")
-    private String contrasenia;
 }

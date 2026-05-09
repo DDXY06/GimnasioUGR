@@ -30,7 +30,6 @@ public class ClienteDTO {
 
     private String direccion;
 
-    @NotBlank(message = "Introduzca una contraseña")
     private String contrasenia;
 
     private List<BonoDTO> bonos; // Relación con Bonos
