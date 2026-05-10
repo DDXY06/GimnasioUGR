@@ -1,4 +1,4 @@
-package com.example.gimnasiougr.controller;
+package com.example.gimnasiougr.Controllers;
 
 import com.example.gimnasiougr.Models.ClienteDTO;
 import com.example.gimnasiougr.Services.ClienteService;
@@ -87,6 +87,7 @@ public class AdminController {
     @GetMapping("/clientes/eliminar/{id}")
     public String eliminarCliente(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
+            /*Recibe booleano, hacer algo si no existe solo por si acaso*/
             clienteService.eliminar(id);
             redirectAttributes.addFlashAttribute("exito", "Cliente eliminado correctamente.");
         } catch (Exception e) {

@@ -20,7 +20,7 @@ public class Cliente {
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "idUsuario", nullable = false)
+    @JoinColumn(name = "idUsuario", nullable = false, unique = true)
     private Usuario usuario;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
@@ -30,6 +30,7 @@ public class Cliente {
     private String nombre;
 
     @NotBlank(message = "Introduzca un DNI")
+    @Size(min = 9, max = 9)
     private String dni;
 
     @Size(max = 20, message = "El teléfono no puede exceder los 20 caracteres")

@@ -1,10 +1,9 @@
-package com.example.gimnasiougr.controller;
+package com.example.gimnasiougr.Controllers;
 
 import com.example.gimnasiougr.Models.TipoUsuario;
 import com.example.gimnasiougr.Models.Usuario;
 import com.example.gimnasiougr.Repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

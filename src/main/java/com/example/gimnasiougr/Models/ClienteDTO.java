@@ -1,8 +1,6 @@
 package com.example.gimnasiougr.Models;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.List;
@@ -16,9 +14,11 @@ public class ClienteDTO {
     private Long usuarioId; // Relación con el Usuario asociado
 
     @NotBlank(message = "Introduzca un nombre")
+    @Size(max = 100, message = "Límite 100 caracteres")
     private String nombre;
 
     @NotBlank(message = "Introduzca un DNI")
+    @Size(min = 9, max = 9, message = "Introduzca un documento válido")
     private String dni;
 
     @Size(max = 20, message = "El teléfono no puede exceder los 20 caracteres")

@@ -17,8 +17,6 @@ public class BonoDTO {
     @NotNull(message = "Introduzca un ID de usuario")
     private Long usuarioId;
 
-    private String usuarioNombre;
-
     @NotNull(message = "Introduzca un tipo de bono")
     private TipoClase tipo;
 

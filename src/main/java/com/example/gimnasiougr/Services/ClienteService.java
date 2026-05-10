@@ -2,9 +2,9 @@ package com.example.gimnasiougr.Services;
 
 import com.example.gimnasiougr.Models.*;
 import com.example.gimnasiougr.Repositories.ClienteRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,76 +17,12 @@ public class ClienteService {
         this.clienteRepository = clienteRepository;
     }
 
-    public ClienteDTO mapToDTO(Cliente cliente) {
-        if (cliente == null) return null;
-        ClienteDTO dto = new ClienteDTO();
-        dto.setId(cliente.getId());
-        if (cliente.getUsuario() != null) {
-            dto.setUsuarioId(cliente.getUsuario().getId());
-            dto.setCorreo(cliente.getUsuario().getCorreo());
-        }
-        dto.setNombre(cliente.getNombre());
-        dto.setDni(cliente.getDni());
-        dto.setTelf(cliente.getTelf());
-        dto.setDireccion(cliente.getDireccion());
-
-        if (cliente.getBonos() != null) {
-            List<BonoDTO> bonoDTOs = cliente.getBonos().stream().map(bono -> {
-                BonoDTO bDto = new BonoDTO();
-                bDto.setId(bono.getId());
-                if (bono.getCliente() != null) {
-                    bDto.setUsuarioId(bono.getCliente().getId());
-                    bDto.setUsuarioNombre(bono.getCliente().getNombre());
-                }
-                bDto.setTipo(bono.getTipo());
-                bDto.setMaxCupos(bono.getMaxCupos());
-                bDto.setFechaCompra(bono.getFechaCompra());
-                return bDto;
-            }).collect(Collectors.toList());
-            dto.setBonos(bonoDTOs);
-        }
-        return dto;
-    }
-
-    private Cliente mapToEntity(ClienteDTO dto) {
-        Cliente cliente = new Cliente();
-
-        // Si el DTO trae un ID, significa que estamos editando un cliente existente.
-        // Lo buscamos en la base de datos para no perder sus datos.
-        if (dto.getId() != null) {
-            cliente = clienteRepository.findById(dto.getId()).orElse(new Cliente());
-        }
-
-        // Asignamos los campos que SÍ existen en tu modelo
-        cliente.setDni(dto.getDni());
-        cliente.setNombre(dto.getNombre());
-        cliente.setTelf(dto.getTelf());          // Aquí es telf, no telefono
-        cliente.setDireccion(dto.getDireccion()); // Añadimos direccion
-
-        // Si el cliente no tiene un usuario asignado (es nuevo), lo creamos
-        if (cliente.getUsuario() == null) {
-            Usuario usuario = new Usuario();
-            usuario.setRol(TipoUsuario.CLIENTE);
-            cliente.setUsuario(usuario);
-        }
-
-        // Asignamos el correo y contraseña al Usuario
-        if (dto.getCorreo() != null) {
-            cliente.getUsuario().setCorreo(dto.getCorreo());
-        }
-
-        // Solo actualizamos la contraseña si nos enviaron una nueva
-        if (dto.getContrasenia() != null && !dto.getContrasenia().isEmpty()) {
-            cliente.getUsuario().setContrasenia(dto.getContrasenia());
-        }
-
-        return cliente;
-    }
-
     public List<ClienteDTO> listarTodos() {
-        return clienteRepository.findAll().stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
+        List<ClienteDTO> clienteDTOS = new ArrayList<>();
+        for (Cliente cliente : clienteRepository.findAll()) {
+            clienteDTOS.add(mapToDTO(cliente));
+        }
+        return clienteDTOS;
     }
 
     public ClienteDTO guardar(ClienteDTO clienteDTO) {
@@ -99,10 +35,15 @@ public class ClienteService {
         return clienteRepository.findById(id).map(this::mapToDTO).orElse(null);
     }
 
-    public void eliminar(Long id) {
-        clienteRepository.findById(id).ifPresent(cliente -> {
-            clienteRepository.delete(cliente);
-        });
+    public boolean eliminar(Long id) {
+        boolean existe = clienteRepository.existsById(id);
+        if (existe) {
+            clienteRepository.findById(id).ifPresent(cliente -> {
+                clienteRepository.delete(cliente);
+            });
+            return existe;
+        }
+        return false;
     }
 
     public List<ClienteDTO> buscarPorFiltro(String tipoFiltro, String textoBusqueda) {
@@ -122,4 +63,69 @@ public class ClienteService {
         return clientes.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
+    public ClienteDTO mapToDTO(Cliente cliente) {
+        if (cliente == null) return null;
+        ClienteDTO cdto = new ClienteDTO();
+        cdto.setId(cliente.getId());
+        if (cliente.getUsuario() != null) {
+            cdto.setUsuarioId(cliente.getUsuario().getId());
+            cdto.setCorreo(cliente.getUsuario().getCorreo());
+        }
+        cdto.setNombre(cliente.getNombre());
+        cdto.setDni(cliente.getDni());
+        cdto.setTelf(cliente.getTelf());
+        cdto.setDireccion(cliente.getDireccion());
+
+        if (cliente.getBonos() != null) {
+            List<BonoDTO> bonoDTOs = new ArrayList<>();
+            for (Bono bono : cliente.getBonos()) {
+                BonoDTO bDto = new BonoDTO();
+                bDto.setId(bono.getId());
+                if (bono.getCliente() != null) {
+                    bDto.setUsuarioId(bono.getCliente().getId());
+                }
+                bDto.setTipo(bono.getTipo());
+                bDto.setMaxCupos(bono.getMaxCupos());
+                bDto.setFechaCompra(bono.getFechaCompra());
+                bonoDTOs.add(bDto);
+            }
+            cdto.setBonos(bonoDTOs);
+        }
+        return cdto;
+    }
+
+    private Cliente mapToEntity(ClienteDTO cdto) {
+        Cliente cliente = new Cliente();
+
+        // Si el DTO trae un ID, significa que estamos editando un cliente existente.
+        // Lo buscamos en la base de datos para no perder sus datos.
+        if (cdto.getId() != null) {
+            cliente = clienteRepository.findById(cdto.getId()).orElse(new Cliente());
+        }
+
+        // Asignamos los campos que SÍ existen en tu modelo
+        cliente.setDni(cdto.getDni());
+        cliente.setNombre(cdto.getNombre());
+        cliente.setTelf(cdto.getTelf());
+        cliente.setDireccion(cdto.getDireccion());
+
+        // Si el cliente no tiene un usuario asignado (es nuevo), lo creamos
+        if (cliente.getUsuario() == null) {
+            Usuario usuario = new Usuario();
+            usuario.setRol(TipoUsuario.CLIENTE);
+            cliente.setUsuario(usuario);
+        }
+
+        // Asignamos el correo y contraseña al Usuario
+        if (cdto.getCorreo() != null) {
+            cliente.getUsuario().setCorreo(cdto.getCorreo());
+        }
+
+        // Solo actualizamos la contraseña si nos enviaron una nueva
+        if (cdto.getContrasenia() != null && !cdto.getContrasenia().isEmpty()) {
+            cliente.getUsuario().setContrasenia(cdto.getContrasenia());
+        }
+
+        return cliente;
+    }
 }
