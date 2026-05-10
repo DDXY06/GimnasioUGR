@@ -58,14 +58,28 @@
             </div>
         </div>
 
+        <!-- EL ROW PRINCIPAL: Todos los elementos deben ir dentro de este contenedor -->
         <div class="row gx-4 gx-lg-5 justify-content-center">
+
+            <!-- ELEMENTO 1 (Ocupa 4/12 columnas) -->
             <div class="col-lg-4 col-md-6 mb-4">
                 <a th:href="@{/admin/clientes}" class="text-decoration-none">
                     <div class="card border-0 shadow rounded-4 h-100">
-                        <div class="card-body p-5 text-center">
+                        <div class="card-body p-5 text-center card-hover">
                             <i class="bi-people fs-1 text-primary mb-3 d-block"></i>
                             <h5 class="fw-bold mb-2">Gestión de Clientes</h5>
                             <p class="text-muted small mb-0">Añade, edita y elimina clientes del gimnasio.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a th:href="@{/admin/bonos}" class="text-decoration-none">
+                    <div class="card border-0 shadow rounded-4 h-100">
+                        <div class="card-body p-5 text-center card-hover">
+                            <i class="bi-ticket-detailed fs-1 text-primary mb-3 d-block"></i>
+                            <h5 class="fw-bold mb-2">Gestión de Bonos</h5>
+                            <p class="text-muted small mb-0">Administra los bonos</p>
                         </div>
                     </div>
                 </a>

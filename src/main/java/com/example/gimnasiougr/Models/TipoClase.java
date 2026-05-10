@@ -9,5 +9,5 @@ public enum TipoClase {
     UNO("Tipo 1"),
     DOS("Tipo 2"),
     TRES("Tipo 3");
-    private final String tipo;
+    private final String nombre;
 }

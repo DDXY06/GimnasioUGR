@@ -104,6 +104,34 @@
                                     </div>
                                 </div>
 
+                                <div th:if="${esNuevo}">
+                                    <div class="col-12 mt-5">
+                                        <h5 class="text-primary mb-3"><i class="bi-shield-lock me-2"></i>Añadir Bono</h5>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-muted">Tipo de Bono</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-0"><i class="bi-card-list"></i></span>
+                                                <select th:field="*{bonos[0].tipo}" class="form-select border-0 bg-light">
+                                                    <option th:each="bonoTipo : ${tiposBonos}"
+                                                            th:value="${bonoTipo}"
+                                                            th:text="${bonoTipo.nombre}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-muted">Cupos</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-0"><i class="bi-123"></i></span>
+                                                <input type="number" th:field="*{bonos[0].maxCupos}" class="form-control border-0 bg-light" placeholder="Cantidad" min="1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="col-12 mt-5">
                                     <h5 class="text-primary mb-3"><i class="bi-shield-lock me-2"></i>Seguridad y Acceso</h5>
                                 </div>
@@ -121,7 +149,7 @@
                                     <label class="form-label fw-semibold text-muted">Contraseña</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light border-0"><i class="bi-key"></i></span>
-                                        <input type="text" th:field="*{contrasenia}"
+                                        <input type="password" th:field="*{contrasenia}"
                                                class="form-control border-0 bg-light"
                                                th:placeholder="${esNuevo ? 'Escribe la contraseña' : 'Vacío para no cambiar'}"
                                                th:required="${esNuevo}"> </div>

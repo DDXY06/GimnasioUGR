@@ -1,5 +1,8 @@
 package com.example.gimnasiougr.Models;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
@@ -17,7 +20,11 @@ public class BonoDTO {
     @NotNull(message = "Introduzca un ID de usuario")
     private Long usuarioId;
 
+    @NotEmpty
+    private String nombreCliente;
+
     @NotNull(message = "Introduzca un tipo de bono")
+    @Enumerated(EnumType.STRING)
     private TipoClase tipo;
 
     @NotNull(message = "Introduzca un número máximo de cupos")
@@ -26,5 +33,5 @@ public class BonoDTO {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Introduzca una fecha de compra")
-    private LocalDate fechaCompra =   LocalDate.now();
+    private LocalDate fechaCompra = LocalDate.now();
 }

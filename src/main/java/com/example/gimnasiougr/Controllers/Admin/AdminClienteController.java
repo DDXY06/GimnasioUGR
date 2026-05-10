@@ -1,6 +1,8 @@
-package com.example.gimnasiougr.Controllers;
+package com.example.gimnasiougr.Controllers.Admin;
 
+import com.example.gimnasiougr.Models.BonoDTO;
 import com.example.gimnasiougr.Models.ClienteDTO;
+import com.example.gimnasiougr.Models.TipoClase;
 import com.example.gimnasiougr.Services.ClienteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,18 +12,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminClienteController {
 
     private final ClienteService clienteService;
 
-    @GetMapping("/index")
-    public String adminIndex() {
-        return "admin/index";
+    @ModelAttribute("tiposBonos")
+    public List<TipoClase> listarTiposBonos() {
+        return List.of(TipoClase.values());
     }
 
     @GetMapping("/clientes")
@@ -41,6 +44,9 @@ public class AdminController {
 
     @GetMapping("/clientes/nuevo")
     public String nuevoForm(Model model) {
+        ClienteDTO cliente = new ClienteDTO();
+        List<BonoDTO> primerBono = new ArrayList<>();
+        cliente.setBonos(primerBono);
         model.addAttribute("cliente", new ClienteDTO());
         model.addAttribute("esNuevo", true);
         return "admin/cliente-form";

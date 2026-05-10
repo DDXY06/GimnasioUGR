@@ -25,11 +25,8 @@ public class Bono {
     @JoinColumn(name = "idCliente", nullable = false)
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "bono", cascade = CascadeType.ALL)
-    private List<Cupo> cuposUsados;
-
     @NotNull(message = "Introduzca un tipo de bono")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private TipoClase tipo;
 
     @NotNull(message = "Introduzca un número máximo de cupos")

@@ -1,5 +1,6 @@
 package com.example.gimnasiougr.Models;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -32,5 +33,6 @@ public class ClienteDTO {
 
     private String contrasenia;
 
-    private List<BonoDTO> bonos; // Relación con Bonos
+    @NotNull
+    private List<BonoDTO> bonos;
 }
