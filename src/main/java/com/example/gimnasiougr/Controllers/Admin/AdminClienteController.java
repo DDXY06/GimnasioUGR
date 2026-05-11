@@ -18,23 +18,18 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin/clientes")
 public class AdminClienteController {
 
     private final ClienteService clienteService;
 
-    @ModelAttribute("tiposBonos")
-    public List<TipoBono> listarTiposBonos() {
-        return List.of(TipoBono.values());
-    }
 
-    @GetMapping("/clientes")
+    @GetMapping()
     public String listarClientes(
             @RequestParam(required = false, defaultValue = "nombre") String tipoFiltro,
             @RequestParam(required = false, defaultValue = "") String textoBusqueda,
             Model model) {
 
-        // Solucionado: Se llama al método correcto del servicio y manejamos DTOs
         List<ClienteDTO> clientes = clienteService.buscarPorFiltro(tipoFiltro, textoBusqueda);
 
         model.addAttribute("clientes", clientes);
@@ -43,17 +38,17 @@ public class AdminClienteController {
         return "admin/clientes";
     }
 
-    @GetMapping("/clientes/nuevo")
+    @GetMapping("/nuevo")
     public String nuevoForm(Model model) {
         ClienteDTO cliente = new ClienteDTO();
-        List<BonoDTO> primerBono = new ArrayList<>();
-        cliente.setBonos(primerBono);
-        model.addAttribute("cliente", new ClienteDTO());
+        cliente.setBonos(new ArrayList<>());
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("tiposBonos", TipoBono.values());
         model.addAttribute("esNuevo", true);
         return "admin/cliente-form";
     }
 
-    @GetMapping("/clientes/editar/{id}")
+    @GetMapping("/editar/{id}")
     public String editarForm(@PathVariable Long id, Model model) {
         ClienteDTO clienteDTO = clienteService.buscarPorId(id);
 
@@ -64,7 +59,7 @@ public class AdminClienteController {
         return "admin/cliente-form";
     }
 
-    @PostMapping("/clientes/guardar")
+    @PostMapping("/guardar")
     public String guardarCliente(
             @Valid @ModelAttribute("cliente") ClienteDTO clienteDTO,
             BindingResult result,
@@ -77,11 +72,11 @@ public class AdminClienteController {
 
         if (result.hasErrors()) {
             model.addAttribute("esNuevo", clienteDTO.getId() == null);
+            model.addAttribute("tiposBonos", TipoBono.values());
             return "admin/cliente-form";
         }
 
         try {
-            // Solucionado: El método en el servicio se llama guardar y sirve para crear o actualizar
             clienteService.guardar(clienteDTO);
             redirectAttributes.addFlashAttribute("exito", "Operación realizada correctamente.");
         } catch (Exception e) {
@@ -91,7 +86,7 @@ public class AdminClienteController {
         return "redirect:/admin/clientes";
     }
 
-    @GetMapping("/clientes/eliminar/{id}")
+    @GetMapping("/eliminar/{id}")
     public String eliminarCliente(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             /*Recibe booleano, hacer algo si no existe solo por si acaso*/

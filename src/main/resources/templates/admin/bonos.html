@@ -116,14 +116,14 @@
                         <th class="py-3 px-4">ID</th>
                         <th class="py-3">Cliente</th>
                         <th class="py-3">Tipo de Bono</th>
-                        <th class="py-3">Cupos Máximos</th>
+                        <th class="py-3">Cupos Restantes / Máximos</th>
                         <th class="py-3">Fecha de Compra</th>
                         <th class="py-3 text-center">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     <!-- th:each itera por la lista de bonos que viene del controlador -->
-                    <tr th:each="b : ${listaBonos}">
+                    <tr th:each="b : ${bonos}">
                         <!-- th:text muestra el valor del identificador del bono -->
                         <td class="px-4 fw-bold text-muted" th:text="${b.id}"></td>
                         <!-- th:text muestra el nombre del cliente relacionado a este bono -->
@@ -131,10 +131,14 @@
                         <!-- th:text muestra el tipo de clase o bono -->
                         <td th:text="${b.tipo}"></td>
                         <!-- th:text muestra la cantidad máxima de cupos permitidos -->
-                        <td th:text="${b.maxCupos}"></td>
+                        <td th:text="${b.maxCupos - b.cuposUsados} + ' / ' + ${b.maxCupos}"></td>
                         <!-- th:text formatea o muestra directamente la fecha en que se compró el bono -->
                         <td th:text="${b.fechaCompra}"></td>
                         <td class="text-center">
+                            <a th:href="@{/admin/bonos/detalle/{id}(id=${b.id})}"
+                               class="btn btn-sm btn-info text-white rounded-pill me-1" title="Ver detalle">
+                                <i class="bi-eye"></i>
+                            </a>
                             <!-- th:href construye dinámicamente la URL con un parámetro en la ruta (path variable) para editar -->
                             <a th:href="@{/admin/bonos/editar/{id}(id=${b.id})}"
                                class="btn btn-sm btn-warning text-dark rounded-pill me-1" title="Editar">
@@ -149,7 +153,7 @@
                         </td>
                     </tr>
                     <!-- th:if evalúa si la lista 'listaBonos' está vacía o nula para mostrar el mensaje de tabla vacía -->
-                    <tr th:if="${listaBonos == null or listaBonos.empty}">
+                    <tr th:if="${bonos == null or bonos.empty}">
                         <td colspan="6" class="text-center py-5 text-muted">
                             <i class="bi-ticket-detailed-fill fs-3 d-block mb-2"></i>
                             No se encontraron bonos.
@@ -163,10 +167,24 @@
     </div>
 </section>
 
-<!-- Footer -->
-<footer class="bg-white py-4 mt-5">
-    <div class="container px-4 px-lg-5 text-center">
-        <div class="small text-muted">Copyright &copy; 2026 - UGRFit Administración</div>
+<!-- Footer-->
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row align-items-center justify-content-center text-center">
+
+            <!-- Contenedor del Logo -->
+            <div class="col-12 mb-3">
+                <img th:src="@{/assets/img/UGR-Logo.png}" alt="Logo Universidad de Granada" style="max-height: 70px;" class="img-fluid opacity-75 hover-opacity-100 transition-all">
+            </div>
+
+            <!-- Texto de Copyright -->
+            <div class="col-12">
+                <div class="small text-muted">
+                    Copyright &copy; 2026 - UGRFit | El Gimnasio de la Universidad de Granada
+                </div>
+            </div>
+
+        </div>
     </div>
 </footer>
 

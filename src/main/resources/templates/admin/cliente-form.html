@@ -117,8 +117,7 @@
                                                 <select th:field="*{bonos[0].tipo}" class="form-select border-0 bg-light">
                                                     <option th:each="bonoTipo : ${tiposBonos}"
                                                             th:value="${bonoTipo}"
-                                                            th:text="${bonoTipo.nombre}">
-                                                    </option>
+                                                            th:text="${bonoTipo}">
                                                 </select>
                                             </div>
                                         </div>
@@ -176,14 +175,25 @@
     </div>
 </section>
 
-<!-- Footer -->
-<footer class="bg-white py-4 mt-5">
-    <div class="container px-4 px-lg-5 text-center">
-        <div class="small text-muted">Copyright &copy; 2026 - UGRFit Administración</div>
+<!-- Footer-->
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row align-items-center justify-content-center text-center">
+
+            <!-- Contenedor del Logo -->
+            <div class="col-12 mb-3">
+                <img th:src="@{/assets/img/UGR-Logo.png}" alt="Logo Universidad de Granada" style="max-height: 70px;" class="img-fluid opacity-75 hover-opacity-100 transition-all">
+            </div>
+
+            <!-- Texto de Copyright -->
+            <div class="col-12">
+                <div class="small text-muted">
+                    Copyright &copy; 2026 - UGRFit | El Gimnasio de la Universidad de Granada
+                </div>
+            </div>
+
+        </div>
     </div>
 </footer>
-
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/js/scripts.js}"></script>
 </body>
 </html>

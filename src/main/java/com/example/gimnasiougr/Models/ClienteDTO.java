@@ -33,6 +33,5 @@ public class ClienteDTO {
 
     private String contrasenia;
 
-    @NotNull
     private List<BonoDTO> bonos;
 }

@@ -9,6 +9,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,4 +35,8 @@ public class BonoDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Introduzca una fecha de compra")
     private LocalDate fechaCompra = LocalDate.now();
+
+    private Integer cuposUsados;
+
+    private List<CupoDTO> cupos;
 }

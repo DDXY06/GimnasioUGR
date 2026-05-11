@@ -89,7 +89,7 @@ public class ClienteService {
                 BonoDTO bDto = new BonoDTO();
                 bDto.setId(bono.getId());
                 if (bono.getCliente() != null) {
-                    bDto.setUsuarioId(bono.getCliente().getId());
+                    bDto.setClienteId(bono.getCliente().getId());
                 }
                 bDto.setTipo(bono.getTipo());
                 bDto.setMaxCupos(bono.getMaxCupos());

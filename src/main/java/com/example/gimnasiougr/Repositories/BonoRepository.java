@@ -10,4 +10,7 @@ import java.util.List;
 @Repository
 public interface BonoRepository extends JpaRepository<Bono, Long> {
     List<Bono> findByFechaCompra(LocalDate fecha);
+
+    List<Bono> findByClienteNombreContainingIgnoreCase(String nombreCliente);
+    List<Bono> findByTipoIn(List<com.example.gimnasiougr.Models.TipoBono> tipos);
 }
