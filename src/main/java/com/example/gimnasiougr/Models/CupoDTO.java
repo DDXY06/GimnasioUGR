@@ -14,7 +14,7 @@ public class CupoDTO {
     private Long id;
 
     @NotNull(message = "Introduzca un ID de usuario")
-    private Long usuarioId;
+    private Long clienteId;
 
     @NotNull(message = "Introduzca un ID de clase")
     private Long claseId;

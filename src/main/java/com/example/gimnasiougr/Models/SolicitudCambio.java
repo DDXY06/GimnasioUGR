@@ -18,7 +18,7 @@ public class SolicitudCambio {
 
     @NotNull(message = "Introduzca un usuario")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idUsuario", nullable = false)
+    @JoinColumn(name = "id_Cliente", nullable = false)
     private Cliente usuario;
 
     @NotNull(message = "Introduzca un cupo")

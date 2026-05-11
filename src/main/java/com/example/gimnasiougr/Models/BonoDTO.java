@@ -18,7 +18,7 @@ public class BonoDTO {
     private Long id;
 
     @NotNull(message = "Introduzca un ID de usuario")
-    private Long usuarioId;
+    private Long clienteId;
 
 
     private String nombreCliente;

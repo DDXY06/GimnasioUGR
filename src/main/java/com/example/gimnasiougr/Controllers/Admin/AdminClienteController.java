@@ -2,6 +2,7 @@ package com.example.gimnasiougr.Controllers.Admin;
 
 import com.example.gimnasiougr.Models.BonoDTO;
 import com.example.gimnasiougr.Models.ClienteDTO;
+import com.example.gimnasiougr.Models.TipoBono;
 import com.example.gimnasiougr.Models.TipoClase;
 import com.example.gimnasiougr.Services.ClienteService;
 import jakarta.validation.Valid;
@@ -23,8 +24,8 @@ public class AdminClienteController {
     private final ClienteService clienteService;
 
     @ModelAttribute("tiposBonos")
-    public List<TipoClase> listarTiposBonos() {
-        return List.of(TipoClase.values());
+    public List<TipoBono> listarTiposBonos() {
+        return List.of(TipoBono.values());
     }
 
     @GetMapping("/clientes")
