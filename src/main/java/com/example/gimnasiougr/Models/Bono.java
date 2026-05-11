@@ -27,7 +27,7 @@ public class Bono {
 
     @NotNull(message = "Introduzca un tipo de bono")
     @Enumerated(EnumType.STRING)
-    private TipoClase tipo;
+    private TipoBono tipo;
 
     @NotNull(message = "Introduzca un número máximo de cupos")
     @Positive(message = "El número máximo de cupos debe ser positivo")

@@ -34,7 +34,7 @@ public class BonoService {
     public Bono guardar(BonoDTO bonoDTO) {
         Bono bono = mapToEntity(bonoDTO);
         Bono guardado = bonoRepository.save(bono);
-        return bono;
+        return guardado;
     }
 
     public BonoDTO buscarPorId(Long id) {

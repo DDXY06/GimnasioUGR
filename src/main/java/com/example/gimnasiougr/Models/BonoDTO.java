@@ -20,12 +20,12 @@ public class BonoDTO {
     @NotNull(message = "Introduzca un ID de usuario")
     private Long usuarioId;
 
-    @NotEmpty
+
     private String nombreCliente;
 
     @NotNull(message = "Introduzca un tipo de bono")
     @Enumerated(EnumType.STRING)
-    private TipoClase tipo;
+    private TipoBono tipo;
 
     @NotNull(message = "Introduzca un número máximo de cupos")
     @Positive(message = "El número máximo de cupos debe ser positivo")
