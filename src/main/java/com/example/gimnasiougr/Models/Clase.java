@@ -28,7 +28,7 @@ public class Clase {
     List<Cupo> cupos;
 
     @NotNull(message = "Introduzca un entrenador")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "idEntrenador")
     private Entrenador entrenador;
 
