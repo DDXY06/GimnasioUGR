@@ -33,7 +33,7 @@ public class Clase {
     private Entrenador entrenador;
 
     @NotNull(message = "Introduzca un tipo de clase")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private TipoClase tipo;
 
     @NotNull(message = "Introduzca un estado")
@@ -48,6 +48,5 @@ public class Clase {
     @NotNull(message = "Introduzca una hora")
     private LocalTime hora;
 
-    @NotNull(message = "Introduzca un número máximo de cupos")
     private Integer maxCupos;
 }
