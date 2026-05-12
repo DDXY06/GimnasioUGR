@@ -16,6 +16,6 @@ public class Deporte {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Introduzca un nombre")
+    @NotBlank(message = "Introduzca el nombre del deporte")
     private String nombre;
 }

@@ -5,9 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum TipoClase {
+public enum TipoBono {
     UNO("Tipo 1"),
-    DOS("Tipo 2"),
-    TRES("Tipo 3");
+    DOS("Tipo 2");
     private final String nombre;
 }

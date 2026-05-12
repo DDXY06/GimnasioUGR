@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Panel de Administración - UGRFit</title>
+
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<body id="page-top" class="bg-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand text-primary fw-bold" th:href="@{/admin/index}">
+            <i class="bi-shield-lock me-2"></i>UGRFit | Panel de Administración
+        </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" th:href="@{/admin/clientes}">
+                        <i class="bi-people me-1"></i>Clientes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" th:href="@{/}">
+                        <i class="bi-house me-1"></i>Web Pública
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" th:href="@{/logout}">
+                        <i class="bi-box-arrow-right me-1"></i>Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<section class="page-section mt-5 pt-5">
+    <div class="container px-4 px-lg-5">
+
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mt-0">Panel de Administración</h2>
+                <hr class="divider mb-5" />
+                <p class="text-muted mb-5">Bienvenido al panel de control de UGRFit. Selecciona una sección para comenzar.</p>
+            </div>
+        </div>
+
+        <!-- EL ROW PRINCIPAL: Todos los elementos deben ir dentro de este contenedor -->
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+
+            <!-- ELEMENTO 1 (Ocupa 4/12 columnas) -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a th:href="@{/admin/clientes}" class="text-decoration-none">
+                    <div class="card border-0 shadow rounded-4 h-100">
+                        <div class="card-body p-5 text-center card-hover">
+                            <i class="bi-people fs-1 text-primary mb-3 d-block"></i>
+                            <h5 class="fw-bold mb-2">Gestión de Clientes</h5>
+                            <p class="text-muted small mb-0">Añade, edita y elimina clientes del gimnasio.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a th:href="@{/admin/bonos}" class="text-decoration-none">
+                    <div class="card border-0 shadow rounded-4 h-100">
+                        <div class="card-body p-5 text-center card-hover">
+                            <i class="bi-ticket-detailed fs-1 text-primary mb-3 d-block"></i>
+                            <h5 class="fw-bold mb-2">Gestión de Bonos</h5>
+                            <p class="text-muted small mb-0">Administra los bonos</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer-->
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row align-items-center justify-content-center text-center">
+
+            <!-- Contenedor del Logo -->
+            <div class="col-12 mb-3">
+                <img th:src="@{/assets/img/UGR-Logo.png}" alt="Logo Universidad de Granada" style="max-height: 70px;" class="img-fluid opacity-75 hover-opacity-100 transition-all">
+            </div>
+
+            <!-- Texto de Copyright -->
+            <div class="col-12">
+                <div class="small text-muted">
+                    Copyright &copy; 2026 - UGRFit | El Gimnasio de la Universidad de Granada
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

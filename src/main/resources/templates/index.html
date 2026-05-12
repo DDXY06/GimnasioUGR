@@ -17,7 +17,7 @@
         <!-- SimpleLightbox plugin CSS-->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles.css" rel="stylesheet" />
+        <link href="/css/styles.css" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -205,21 +205,16 @@
 
                         <form id="loginForm" th:action="@{/login}" method="POST">
 
-                            <!-- Campo Email -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="email" name="username" type="email" placeholder="correo@correo.ugr.es" required />
+                                <input class="form-control" id="email" name="correo" type="email" placeholder="correo@correo.ugr.es" required />
                                 <label for="email">Correo Electrónico (UGR)</label>
                             </div>
 
-                            <!-- Campo Contraseña -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="password" name="password" type="password" placeholder="Tu contraseña" required />
+                                <input class="form-control" id="password" name="contrasenia" type="password" placeholder="Tu contraseña" required />
                                 <label for="password">Contraseña</label>
                             </div>
 
-
-
-                            <!-- Botón de Entrar -->
                             <div class="d-grid">
                                 <button class="btn btn-primary btn-xl" id="loginButton" type="submit">Entrar al Gimnasio</button>
                             </div>

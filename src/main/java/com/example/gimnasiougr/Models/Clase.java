@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -25,7 +24,7 @@ public class Clase {
     @JoinColumn(name = "idDeporte")
     private Deporte deporte;
 
-    @OneToMany(mappedBy = "clase")
+    @OneToMany(mappedBy = "clase", cascade = CascadeType.ALL)
     List<Cupo> cupos;
 
     @NotNull(message = "Introduzca un entrenador")

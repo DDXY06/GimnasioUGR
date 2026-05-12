@@ -22,15 +22,12 @@ public class Bono {
 
     @NotNull(message = "Introduzca un usuario")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idUsuario", nullable = false)
-    private Usuario usuario;
-
-    @OneToMany(mappedBy = "bono")
-    List<Cupo> cuposUsados;
+    @JoinColumn(name = "idCliente", nullable = false)
+    private Cliente cliente;
 
     @NotNull(message = "Introduzca un tipo de bono")
-    @Enumerated(EnumType.ORDINAL)
-    private TipoClase tipo;
+    @Enumerated(EnumType.STRING)
+    private TipoBono tipo;
 
     @NotNull(message = "Introduzca un número máximo de cupos")
     @Positive(message = "El número máximo de cupos debe ser positivo")

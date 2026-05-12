@@ -3,6 +3,7 @@ package com.example.gimnasiougr.Models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -17,13 +18,8 @@ public class Administrador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Introduzca un nombre")
-    private String nombre;
-
-    @NotBlank(message = "Introduzca un correo")
-    @Email(message = "El formato del correo no es válido")
-    private String correo;
-
-    @NotBlank(message = "Introduzca una contraseña")
-    private String contrasenia;
+    @NotNull
+    @OneToOne
+    @JoinColumn(name = "idUsuario", nullable = false)
+    private Usuario usuario;
 }

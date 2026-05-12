@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,8 +18,9 @@ public class Entrenador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "entrenador")
-    List<Clase> clases;
+    @OneToOne
+    @JoinColumn(name = "idUsuario", nullable = false)
+    private Usuario usuario;
 
     @NotNull
     @NotBlank(message = "Introduzca un nombre")
@@ -34,11 +33,4 @@ public class Entrenador {
     @Size(max = 20, message = "El teléfono no puede exceder los 20 caracteres")
     private String telf;
 
-    @NotNull
-    @NotBlank(message = "Introduzca un correo")
-    @Email(message = "El formato del correo no es válido")
-    private String correo;
-
-    @NotBlank(message = "Introduzca una contraseña")
-    private String contrasenia;
 }
