@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Mi Panel - UGRFit</title>
+
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <style>
+        .divider-start { border-top: 3px solid #0d6efd; opacity: 1; }
+        .card { border: none; }
+        .stat-card { transition: transform .15s, box-shadow .15s; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.1) !important; }
+    </style>
+</head>
+<body id="page-top" class="bg-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand text-primary fw-bold" th:href="@{/cliente/index}">
+            <i class="bi-person-circle me-2"></i>UGRFit | Área de Socio
+        </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-primary fw-semibold" th:href="@{/cliente/index}">
+                        <i class="bi-house me-1"></i>Inicio
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" th:href="@{/cliente/mis-bonos}">
+                        <i class="bi-ticket-detailed me-1"></i>Mis Bonos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" th:href="@{/cliente/horario-tipo1}">
+                        <i class="bi-calendar-week me-1"></i>Horario Grupal
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" th:href="@{/cliente/solicitar-tipo2}">
+                        <i class="bi-person-video3 me-1"></i>Clase Individual
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" th:href="@{/cliente/clases-tipo3}">
+                        <i class="bi-calendar-event me-1"></i>Clases Especiales
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" th:href="@{/logout}">
+                        <i class="bi-box-arrow-right me-1"></i>Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="page-section mt-5 pt-5">
+    <div class="container px-4 px-lg-5">
+
+        <!-- Cabecera de bienvenida -->
+        <div class="mb-4">
+            <h2 class="mt-0 mb-1">Hola, <span th:text="${cliente.nombre}">Socio</span></h2>
+            <p class="text-muted mb-0">Aquí tienes un resumen de tu actividad en UGRFit.</p>
+        </div>
+        <hr class="divider divider-start mb-5" style="max-width: 5rem; margin-left: 0;" />
+
+        <!-- Mensajes flash -->
+        <div th:if="${exito}" class="alert alert-success alert-dismissible rounded-3 mb-4" role="alert">
+            <i class="bi-check-circle-fill me-2"></i><span th:text="${exito}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible rounded-3 mb-4" role="alert">
+            <i class="bi-exclamation-triangle-fill me-2"></i><span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <!-- Tarjetas de acceso rápido -->
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <a th:href="@{/cliente/horario-tipo1}" class="text-decoration-none">
+                <div class="card border-0 shadow rounded-4 h-100">
+                    <div class="card-body p-5 text-center card-hover">
+                        <i class="bi-calendar-week fs-1 text-primary mb-3 d-block"></i>
+                        <h5 class="fw-bold mb-2">Mi Horario Grupal</h5>
+                        <p class="text-muted small mb-0">Consulta tus franjas horarias semanales de clases grupales</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <a th:href="@{/cliente/mis-bonos}" class="text-decoration-none">
+                <div class="card border-0 shadow rounded-4 h-100">
+                    <div class="card-body p-5 text-center card-hover">
+                        <i class="bi-ticket-detailed fs-1 text-primary mb-3 d-block"></i>
+                        <h5 class="fw-bold mb-2">Mis Bonos</h5>
+                        <p class="text-muted small mb-0">Consulta tus bonos activos y los cupos disponibles</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <a th:href="@{/cliente/solicitar-tipo2}" class="text-decoration-none">
+                <div class="card border-0 shadow rounded-4 h-100">
+                    <div class="card-body p-5 text-center card-hover">
+                        <i class="bi-person-video3 fs-1 text-primary mb-3 d-block"></i>
+                        <h5 class="fw-bold mb-2">Clase Individual</h5>
+                        <p class="text-muted small mb-0">Solicita una clase particular con tu entrenador</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <a th:href="@{/cliente/clases-tipo3}" class="text-decoration-none">
+                <div class="card border-0 shadow rounded-4 h-100">
+                    <div class="card-body p-5 text-center card-hover">
+                        <i class="bi-calendar-event fs-1 text-primary mb-3 d-block"></i>
+                        <h5 class="fw-bold mb-2">Clases Especiales</h5>
+                        <p class="text-muted small mb-0">Explora e inscríbete en las actividades puntuales del gimnasio</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row align-items-center justify-content-center text-center">
+            <div class="col-12 mb-3">
+                <img th:src="@{/assets/img/UGR-Logo.png}" alt="Logo Universidad de Granada"
+                     style="max-height: 70px;" class="img-fluid opacity-75">
+            </div>
+            <div class="col-12">
+                <div class="small text-muted">
+                    Copyright &copy; 2026 - UGRFit | El Gimnasio de la Universidad de Granada
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>
