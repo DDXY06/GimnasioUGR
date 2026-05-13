@@ -3,6 +3,7 @@ package com.example.gimnasiougr.Controllers;
 import com.example.gimnasiougr.Models.TipoUsuario;
 import com.example.gimnasiougr.Models.Usuario;
 import com.example.gimnasiougr.Repositories.UsuarioRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,16 +28,18 @@ public class LoginController {
     public String login(
             @RequestParam("correo") String correo,
             @RequestParam("contrasenia") String contrasenia,
+            HttpSession session,
             Model model) {
 
         Optional<Usuario> resultado = usuarioRepository.findByCorreoAndContrasenia(correo, contrasenia);
 
         if (resultado.isEmpty()) {
-            model.addAttribute("loginError", "Correo o contraseña incorrectos. Inténtalo de nuevo.");
+            model.addAttribute("loginError", "Correo o contraseña incorrectos.");
             return "index";
         }
 
         Usuario usuario = resultado.get();
+        session.setAttribute("usuarioLogeado", usuario);
 
         if (usuario.getRol() == TipoUsuario.ADMINISTRADOR) {
             return "redirect:/admin/index";

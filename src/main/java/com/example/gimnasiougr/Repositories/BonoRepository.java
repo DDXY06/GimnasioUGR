@@ -13,4 +13,5 @@ public interface BonoRepository extends JpaRepository<Bono, Long> {
 
     List<Bono> findByClienteNombreContainingIgnoreCase(String nombreCliente);
     List<Bono> findByTipoIn(List<com.example.gimnasiougr.Models.TipoBono> tipos);
+    List<Bono> findByClienteId(Long clienteId);
 }

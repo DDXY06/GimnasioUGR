@@ -130,4 +130,10 @@ public class BonoService {
                 })
                 .orElse(null);
     }
+
+    public List<BonoDTO> buscarPorClienteId(Long clienteId) {
+        return bonoRepository.findByClienteId(clienteId).stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
 }
