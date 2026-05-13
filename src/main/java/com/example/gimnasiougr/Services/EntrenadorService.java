@@ -2,6 +2,7 @@ package com.example.gimnasiougr.Services;
 
 import com.example.gimnasiougr.Models.*;
 import com.example.gimnasiougr.Repositories.EntrenadorRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,13 +11,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class EntrenadorService {
 
     private final EntrenadorRepository entrenadorRepository;
-
-    public EntrenadorService(EntrenadorRepository entrenadorRepository) {
-        this.entrenadorRepository = entrenadorRepository;
-    }
 
     public List<EntrenadorDTO> listarTodos() {
         List<EntrenadorDTO> entrenadorDTOS = new ArrayList<>();

@@ -4,6 +4,7 @@ import com.example.gimnasiougr.Models.*;
 import com.example.gimnasiougr.Repositories.ClaseRepository;
 import com.example.gimnasiougr.Repositories.DeporteRepository;
 import com.example.gimnasiougr.Repositories.EntrenadorRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,22 +13,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ClaseService {
 
     private final ClaseRepository claseRepository;
     private final DeporteRepository deporteRepository;
     private final EntrenadorRepository entrenadorRepository;
     private final CupoService cupoService;
-
-    public ClaseService(ClaseRepository claseRepository,
-                        DeporteRepository deporteRepository,
-                        EntrenadorRepository entrenadorRepository,
-                        CupoService cupoService) {
-        this.claseRepository = claseRepository;
-        this.deporteRepository = deporteRepository;
-        this.entrenadorRepository = entrenadorRepository;
-        this.cupoService = cupoService;
-    }
 
     public List<ClaseDTO> listarTodos() {
         List<ClaseDTO> claseDTOs = new ArrayList<>();

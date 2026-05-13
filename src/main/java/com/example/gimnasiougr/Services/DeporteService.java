@@ -2,19 +2,17 @@ package com.example.gimnasiougr.Services;
 
 import com.example.gimnasiougr.Models.Deporte;
 import com.example.gimnasiougr.Repositories.DeporteRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class DeporteService {
 
     private final DeporteRepository deporteRepository;
-
-    public DeporteService(DeporteRepository deporteRepository) {
-        this.deporteRepository = deporteRepository;
-    }
 
     public List<Deporte> listarTodos() {
         return deporteRepository.findAll();

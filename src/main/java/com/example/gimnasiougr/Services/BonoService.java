@@ -6,6 +6,7 @@ import com.example.gimnasiougr.Models.TipoBono;
 import com.example.gimnasiougr.Repositories.BonoRepository;
 import com.example.gimnasiougr.Repositories.ClienteRepository;
 import com.example.gimnasiougr.Repositories.CupoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,19 +16,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BonoService {
 
     private final BonoRepository bonoRepository;
     private final ClienteRepository clienteRepository;
     private final CupoService cupoService;
-
-    public BonoService(BonoRepository bonoRepository,
-                       ClienteRepository clienteRepository,
-                       CupoService cupoService) {
-        this.bonoRepository = bonoRepository;
-        this.clienteRepository = clienteRepository;
-        this.cupoService = cupoService;
-    }
 
     public List<BonoDTO> listarTodos() {
         return bonoRepository.findAll().stream()
