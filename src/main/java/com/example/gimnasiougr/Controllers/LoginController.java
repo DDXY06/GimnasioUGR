@@ -3,7 +3,6 @@ package com.example.gimnasiougr.Controllers;
 import com.example.gimnasiougr.Models.TipoUsuario;
 import com.example.gimnasiougr.Models.Usuario;
 import com.example.gimnasiougr.Repositories.UsuarioRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +17,7 @@ import java.util.Optional;
 public class LoginController {
 
     private final UsuarioRepository usuarioRepository;
+    public static Usuario usuarioLogeadoGlobal = null;
 
     @GetMapping("/")
     public String index() {
@@ -28,7 +28,6 @@ public class LoginController {
     public String login(
             @RequestParam("correo") String correo,
             @RequestParam("contrasenia") String contrasenia,
-            HttpSession session,
             Model model) {
 
         Optional<Usuario> resultado = usuarioRepository.findByCorreoAndContrasenia(correo, contrasenia);
@@ -39,7 +38,7 @@ public class LoginController {
         }
 
         Usuario usuario = resultado.get();
-        session.setAttribute("usuarioLogeado", usuario);
+        usuarioLogeadoGlobal = usuario;
 
         if (usuario.getRol() == TipoUsuario.ADMINISTRADOR) {
             return "redirect:/admin/index";
@@ -52,6 +51,7 @@ public class LoginController {
 
     @GetMapping("/logout")
     public String logout() {
+        usuarioLogeadoGlobal = null;
         return "redirect:/";
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ClaseRepository extends JpaRepository<Clase, Long> {
+    List<Clase> findByTipo(TipoClase tipoClase);
     List<Clase> findByTipoOrderByFechaAscHoraAsc(TipoClase tipo);
     List<Clase> findByDeporteNombreContainingIgnoreCase(String nombre);
     List<Clase> findByEntrenadorNombreContainingIgnoreCase(String nombre);

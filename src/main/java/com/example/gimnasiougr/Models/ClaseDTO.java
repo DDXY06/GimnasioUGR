@@ -22,10 +22,11 @@ public class ClaseDTO {
     @NotNull(message = "Introduzca un ID de deporte")
     private Long deporteId;
 
+    private String nombreDeporte;
+
     @NotNull(message = "Introduzca un ID de entrenador")
     private Long entrenadorId;
 
-    private String nombreDeporte;
     private String nombreEntrenador;
 
     @NotNull(message = "Introduzca un tipo de clase")
@@ -45,4 +46,9 @@ public class ClaseDTO {
     private LocalTime hora;
 
     private Integer maxCupos;
+
+    private Integer cuposOcupados;
+    private boolean inscrito;
+    private Long cupoId;
+    private boolean cambioSolicitado;
 }
