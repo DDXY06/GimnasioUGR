@@ -18,8 +18,12 @@ public class ClaseDTO {
     @NotNull(message = "Introduzca un ID de deporte")
     private Long deporteId;
 
+    private String nombreDeporte;
+
     @NotNull(message = "Introduzca un ID de entrenador")
     private Long entrenadorId;
+
+    private String nombreEntrenador;
 
     @NotNull(message = "Introduzca un tipo de clase")
     private TipoClase tipo;
@@ -35,4 +39,9 @@ public class ClaseDTO {
 
     @NotNull(message = "Introduzca un número máximo de cupos")
     private Integer maxCupos;
+
+    private Integer cuposOcupados;
+    private boolean inscrito;
+    private Long cupoId;
+    private boolean cambioSolicitado;
 }

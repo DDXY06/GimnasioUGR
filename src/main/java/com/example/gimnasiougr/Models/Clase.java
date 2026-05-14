@@ -33,7 +33,7 @@ public class Clase {
     private Entrenador entrenador;
 
     @NotNull(message = "Introduzca un tipo de clase")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private TipoClase tipo;
 
     @NotNull(message = "Introduzca un estado")

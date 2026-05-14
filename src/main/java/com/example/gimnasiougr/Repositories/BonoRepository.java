@@ -1,6 +1,7 @@
 package com.example.gimnasiougr.Repositories;
 
 import com.example.gimnasiougr.Models.Bono;
+import com.example.gimnasiougr.Models.TipoBono;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,6 @@ public interface BonoRepository extends JpaRepository<Bono, Long> {
     List<Bono> findByClienteNombreContainingIgnoreCase(String nombreCliente);
     List<Bono> findByTipoIn(List<com.example.gimnasiougr.Models.TipoBono> tipos);
     List<Bono> findByClienteId(Long clienteId);
+
+    boolean existsByClienteIdAndTipo(Long id, TipoBono tipoBono);
 }

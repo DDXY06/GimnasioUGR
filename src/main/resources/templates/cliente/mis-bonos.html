@@ -10,14 +10,18 @@
     <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <style>
+        .divider-start { border-top: 3px solid #0d6efd; opacity: 1; }
+        .card { border: none; }
+    </style>
 </head>
 <body id="page-top" class="bg-light">
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top py-3" id="mainNav">
     <div class="container px-4 px-lg-5">
-        <a class="navbar-brand fw-bold" style="color:#1D9E75;" th:href="@{/cliente/index}">
-            <i class="bi-person-circle me-2"></i>UGRFit | Mi Portal
+        <a class="navbar-brand text-primary fw-bold" th:href="@{/cliente/index}">
+            <i class="bi-person-circle me-2"></i>UGRFit | Área de Socio
         </a>
         <button class="navbar-toggler navbar-toggler-right" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
@@ -27,10 +31,29 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link fw-semibold" style="color:#1D9E75;" th:href="@{/cliente/mis-bonos}">Mis Bonos</a>
+                    <a class="nav-link text-dark" th:href="@{/cliente/index}">
+                        <i class="bi-house me-1"></i>Inicio
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" th:href="@{/cliente/index}">Inicio</a>
+                    <a class="nav-link text-primary fw-semibold" th:href="@{/cliente/mis-bonos}">
+                        <i class="bi-ticket-detailed me-1"></i>Mis Bonos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" th:href="@{/cliente/clases-tipo1}">
+                        <i class="bi-calendar-week me-1"></i>Horario Grupal
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" th:href="@{/cliente/clases-tipo2}">
+                        <i class="bi-person-video3 me-1"></i>Clase Individual
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" th:href="@{/cliente/clases-tipo3}">
+                        <i class="bi-calendar-event me-1"></i>Clases Especiales
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-danger" th:href="@{/logout}">
@@ -45,87 +68,57 @@
 <section class="page-section mt-5 pt-5">
     <div class="container px-4 px-lg-5">
 
-        <!-- Cabecera -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <!-- th:text muestra dinámicamente el nombre del cliente autenticado -->
-                <h2 class="mt-0 mb-1">Mis Bonos</h2>
-                <p class="text-muted mb-0">
-                    Bienvenido/a,
-                    <strong th:text="${nombreCliente}">Cliente</strong>.
-                    Aquí puedes consultar todos tus bonos y los cupos disponibles.
-                </p>
-            </div>
+        <div class="mb-4">
+            <h2 class="mt-0 mb-1">Mis Bonos Activos</h2>
+            <p class="text-muted mb-0">
+                Bienvenido/a, <span th:text="${nombreCliente}" class="fw-bold">Usuario</span>.
+                Aquí puedes ver el estado de tus bonos comprados.
+            </p>
+
         </div>
         <hr class="divider divider-start mb-5" style="max-width: 5rem; margin-left: 0;" />
 
-        <!-- Tabla de bonos -->
-        <div class="card border-0 shadow rounded-4 overflow-hidden">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0 align-middle">
+        <div class="card shadow rounded-4">
+            <div class="card-body p-4">
+                <table class="table table-hover align-middle mt-2">
                     <thead class="table-dark">
                     <tr>
-                        <th class="py-3 px-4">ID</th>
-                        <th class="py-3">Tipo de Bono</th>
-                        <th class="py-3">Cupos Disponibles</th>
-                        <th class="py-3">Cupos Máximos</th>
-                        <th class="py-3">Fecha de Compra</th>
-                        <th class="py-3 text-center">Detalle</th>
+                        <th>Tipo Bono</th>
+                        <th>Fecha de Compra</th>
+                        <th class="text-center">Cupos Totales</th>
+                        <th class="text-center">Cupos Usados</th>
+                        <th class="text-center">Disponibles</th>
+                        <th>Estado</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- th:each itera la lista de bonos del cliente -->
-                    <tr th:each="b : ${bonos}">
-                        <!-- th:text muestra el identificador del bono -->
-                        <td class="px-4 fw-bold text-muted" th:text="${b.id}"></td>
-                        <!-- th:text muestra el tipo de bono (UNO, DOS…) -->
-                        <td>
-                            <span class="badge rounded-pill px-3 py-2"
-                                  style="background-color:#1D9E75;font-size:0.8rem;"
-                                  th:text="${b.tipo}">TIPO</span>
-                        </td>
-                        <!-- th:text calcula los cupos restantes del bono -->
-                        <td>
-                            <span class="fw-semibold"
-                                  th:classappend="${(b.maxCupos - b.cuposUsados) == 0} ? 'text-danger' : 'text-success'"
-                                  th:text="${b.maxCupos - b.cuposUsados}">0</span>
-                        </td>
-                        <!-- th:text muestra el total de cupos contratados -->
-                        <td th:text="${b.maxCupos}"></td>
-                        <!-- th:text muestra la fecha en que se adquirió el bono -->
-                        <td th:text="${b.fechaCompra}"></td>
+                    <tr th:each="bono : ${bonos}">
+                        <td th:text="${bono.tipo}">Pilates</td>
+                        <td th:text="${#temporals.format(bono.fechaCompra, 'dd/MM/yyyy')}">01/01/2024</td>
+                        <td th:text="${bono.maxCupos}" class="text-center">10</td>
+                        <td th:text="${bono.cuposUsados}" class="text-center">2</td>
                         <td class="text-center">
-                            <!-- th:href construye la URL con el ID del bono para ver el detalle -->
-                            <a th:href="@{/admin/bonos/detalle/{id}(id=${b.id})}"
-                               class="btn btn-sm btn-outline-secondary rounded-pill" title="Ver detalle">
-                                <i class="bi-eye me-1"></i>Ver usos
-                            </a>
+                            <span class="badge bg-info text-dark"
+                                  th:text="${bono.maxCupos - bono.cuposUsados}">8</span>
+                        </td>
+                        <td>
+                            <span th:if="${bono.cuposUsados < bono.maxCupos}" class="badge bg-success">Activo</span>
+                            <span th:if="${bono.cuposUsados >= bono.maxCupos}" class="badge bg-danger">Agotado</span>
                         </td>
                     </tr>
-                    <!-- th:if muestra el aviso cuando el cliente no tiene bonos -->
-                    <tr th:if="${bonos == null or bonos.empty}">
-                        <td colspan="6" class="text-center py-5 text-muted">
-                            <i class="bi-ticket-detailed-fill fs-3 d-block mb-2"></i>
-                            Todavía no tienes ningún bono asignado.
-                        </td>
+                    <tr th:if="${#lists.isEmpty(bonos)}">
+                        <td colspan="6" class="text-center text-muted py-4">No tienes bonos activos en este momento.</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Volver al panel -->
-        <div class="mt-4">
-            <a th:href="@{/cliente/index}" class="btn btn-outline-secondary rounded-pill px-4">
-                <i class="bi-arrow-left me-2"></i>Volver al panel
-            </a>
-        </div>
-
     </div>
 </section>
 
 <!-- Footer -->
-<footer class="bg-light py-5">
+<footer class="bg-light py-5 mt-5">
     <div class="container px-4 px-lg-5">
         <div class="row align-items-center justify-content-center text-center">
             <div class="col-12 mb-3">

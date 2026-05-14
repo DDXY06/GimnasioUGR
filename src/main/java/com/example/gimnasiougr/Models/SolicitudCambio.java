@@ -19,16 +19,16 @@ public class SolicitudCambio {
     @NotNull(message = "Introduzca un usuario")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_Cliente", nullable = false)
-    private Cliente usuario;
+    private Cliente cliente;
 
     @NotNull(message = "Introduzca un cupo")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idCupo", nullable = false)
+    @JoinColumn(name = "id_Cupo", nullable = false)
     private Cupo cupo;
 
     @NotNull(message = "Introduzca una clase de cambio")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idClaseCambio", nullable = false)
+    @JoinColumn(name = "id_clase_cambio", nullable = false)
     private Clase claseCambio;
 
     @NotNull(message = "Introduzca un estado")
