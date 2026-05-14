@@ -28,7 +28,7 @@ public class Clase {
     List<Cupo> cupos;
 
     @NotNull(message = "Introduzca un entrenador")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "idEntrenador")
     private Entrenador entrenador;
 
@@ -48,6 +48,5 @@ public class Clase {
     @NotNull(message = "Introduzca una hora")
     private LocalTime hora;
 
-    @NotNull(message = "Introduzca un número máximo de cupos")
     private Integer maxCupos;
 }

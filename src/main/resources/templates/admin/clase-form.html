@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title th:text="${clase.id == null ? 'Nueva Clase' : 'Editar Clase'} + ' - UGRFit'"></title>
+
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <style>
+        .divider-start { border-top: 3px solid #0d6efd; opacity: 1; }
+        .card { border: none; }
+    </style>
+</head>
+<body id="page-top" class="bg-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand text-primary fw-bold" th:href="@{/admin/index}">
+            <i class="bi-shield-lock me-2"></i>UGRFit | Panel de Administración
+        </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" th:href="@{/admin/clientes}">Clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary fw-semibold" th:href="@{/admin/clases/}">
+                        <i class="bi-calendar-event me-1"></i>Clases
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" th:href="@{/admin/index}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" th:href="@{/logout}">
+                        <i class="bi-box-arrow-right me-1"></i>Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="page-section mt-5 pt-5">
+    <div class="container px-4 px-lg-5">
+
+        <div class="mb-4">
+            <h2 class="mt-0 mb-1" th:text="${clase.id == null ? 'Nueva Clase' : 'Editar Clase'}"></h2>
+            <p class="text-muted mb-0">Configura los detalles de la clase, horarios y asignaciones.</p>
+        </div>
+        <hr class="divider divider-start mb-5" style="max-width: 5rem; margin-left: 0;" />
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow rounded-4 overflow-hidden">
+                    <div class="card-body p-4 p-md-5">
+                        <form th:action="@{/admin/clases/guardar}" th:object="${clase}" method="post">
+                            <input type="hidden" th:field="*{id}" />
+
+                            <div class="row g-4">
+                                <div class="col-12">
+                                    <h5 class="text-primary mb-3"><i class="bi-info-circle me-2"></i>Información Principal</h5>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-muted">Deporte</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="bi-trophy"></i></span>
+                                        <select th:field="*{deporteId}" class="form-select border-0 bg-light" required>
+                                            <option value="" disabled selected>Selecciona un deporte...</option>
+                                            <option th:each="d : ${deportes}" th:value="${d.id}" th:text="${d.nombre}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('deporteId')}" th:errors="*{deporteId}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-muted">Tipo de Clase</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="bi-tags"></i></span>
+                                        <select th:field="*{tipo}" class="form-select border-0 bg-light" required id="tipo">
+                                            <option value="" disabled selected>Selecciona un tipo...</option>
+                                            <option th:each="t : ${tiposClase}" th:if="${t.name() != 'DOS'}" th:value="${t}" th:text="${t.nombre}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-muted">Entrenador Asignado</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="bi-person-workspace"></i></span>
+                                        <select th:field="*{entrenadorId}" class="form-select border-0 bg-light" required>
+                                            <option value="" disabled selected>Selecciona un entrenador...</option>
+                                            <option th:each="e : ${entrenadores}" th:value="${e.id}" th:text="${e.nombre}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('entrenadorId')}" th:errors="*{entrenadorId}"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-muted">Estado</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="bi-activity"></i></span>
+                                        <select th:field="*{estado}" class="form-select border-0 bg-light" required>
+                                            <option value="" disabled selected>Selecciona el estado...</option>
+                                            <option th:each="est : ${estados}" th:value="${est}" th:text="${est.name()}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></div>
+                                </div>
+
+                                <div class="col-12 mt-4">
+                                    <h5 class="text-primary mb-3"><i class="bi-calendar-clock me-2"></i>Horario y Capacidad</h5>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted">Fecha</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="bi-calendar-date"></i></span>
+                                        <input type="date" th:field="*{fecha}" class="form-control border-0 bg-light" required>
+                                    </div>
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted">Hora</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="bi-clock"></i></span>
+                                        <input type="time" th:field="*{hora}" class="form-control border-0 bg-light" required>
+                                    </div>
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('hora')}" th:errors="*{hora}"></div>
+                                </div>
+
+                                <div class="col-md-4" id="maxCuposContainer">
+                                    <label class="form-label fw-semibold text-muted">Plazas / Max. Cupos</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="bi-people"></i></span>
+                                        <input type="number" th:field="*{maxCupos}" class="form-control border-0 bg-light" min="1" placeholder="Ej: 20">
+                                    </div>
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('maxCupos')}" th:errors="*{maxCupos}"></div>
+                                </div>
+
+                            </div>
+
+                            <div class="mt-5 pt-3 border-top d-flex justify-content-end gap-3">
+                                <a th:href="@{/admin/clases/}" class="btn btn-light px-4 rounded-pill">
+                                    Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary px-5 rounded-pill shadow-sm">
+                                    <i class="bi-check-lg me-2"></i>Guardar Clase
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer-->
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row align-items-center justify-content-center text-center">
+
+            <!-- Contenedor del Logo -->
+            <div class="col-12 mb-3">
+                <img th:src="@{/assets/img/UGR-Logo.png}" alt="Logo Universidad de Granada" style="max-height: 70px;" class="img-fluid opacity-75 hover-opacity-100 transition-all">
+            </div>
+
+            <!-- Texto de Copyright -->
+            <div class="col-12">
+                <div class="small text-muted">
+                    Copyright &copy; 2026 - UGRFit | El Gimnasio de la Universidad de Granada
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const tipoSelect = document.getElementById("tipo");
+        const maxCuposContainer = document.getElementById("maxCuposContainer");
+
+        function updateCuposVisibility() {
+            if (tipoSelect.value === "TRES") {
+                maxCuposContainer.style.display = "block";
+            } else {
+                maxCuposContainer.style.display = "none";
+            }
+        }
+
+        if(tipoSelect && maxCuposContainer) {
+            tipoSelect.addEventListener("change", updateCuposVisibility);
+            // Ejecutar al cargar la página para establecer el estado inicial
+            updateCuposVisibility();
+        }
+    });
+</script>
+</body>
+</html>
