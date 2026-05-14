@@ -1,16 +1,24 @@
 package com.example.gimnasiougr.Services;
 
-import com.example.gimnasiougr.Models.*;
-import com.example.gimnasiougr.Repositories.ClaseRepository;
-import com.example.gimnasiougr.Repositories.DeporteRepository;
-import com.example.gimnasiougr.Repositories.EntrenadorRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.gimnasiougr.Models.Clase;
+import com.example.gimnasiougr.Models.ClaseDTO;
+import com.example.gimnasiougr.Models.Cupo;
+import com.example.gimnasiougr.Models.CupoDTO;
+import com.example.gimnasiougr.Models.TipoClase;
+import com.example.gimnasiougr.Repositories.ClaseRepository;
+import com.example.gimnasiougr.Repositories.DeporteRepository;
+import com.example.gimnasiougr.Repositories.EntrenadorRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -70,10 +78,31 @@ public class ClaseService {
             clases = claseRepository.findByDeporteNombreContainingIgnoreCase(textoBusqueda);
         } else if ("entrenador".equalsIgnoreCase(tipoFiltro)) {
             clases = claseRepository.findByEntrenadorNombreContainingIgnoreCase(textoBusqueda);
+        } else if ("fecha".equalsIgnoreCase(tipoFiltro)) {
+            try {
+                clases = claseRepository.findByFecha(LocalDate.parse(textoBusqueda));
+            } catch (Exception e) {
+                clases = new ArrayList<>();
+            }
+        } else if ("hora".equalsIgnoreCase(tipoFiltro)) {
+            try {
+                clases = claseRepository.findByHora(LocalTime.parse(textoBusqueda));
+            } catch (Exception e) {
+                clases = new ArrayList<>();
+            }
+        } else if ("fechahora".equalsIgnoreCase(tipoFiltro) || "fecha_hora".equalsIgnoreCase(tipoFiltro)) {
+            try {
+                String[] fechaHora = textoBusqueda.split("T| ");
+                LocalDate fecha = LocalDate.parse(fechaHora[0]);
+                LocalTime hora = LocalTime.parse(fechaHora[1]);
+                clases = claseRepository.findByFechaAndHora(fecha, hora);
+            } catch (Exception e) {
+                clases = new ArrayList<>();
+            }
         } else {
             clases = claseRepository.findAll();
         }
-
+    
         return clases.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
