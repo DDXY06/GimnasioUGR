@@ -42,10 +42,9 @@ public class ClaseService {
 
     @Transactional
     public boolean eliminar(Long id) {
+        //Comprobamos si la clase existe
         if (claseRepository.existsById(id)) {
-            claseRepository.findById(id).ifPresent(clase -> {
-                claseRepository.delete(clase);
-            });
+            claseRepository.deleteById(id);
             return true;
         }
         return false;
@@ -56,25 +55,48 @@ public class ClaseService {
             return listarTodos();
         }
 
-        List<Clase> clases;
-        if ("tipo".equalsIgnoreCase(tipoFiltro)) {
-            List<Clase> matchingClases = new ArrayList<>();
-            for (TipoClase t : TipoClase.values()) {
-                if (t.name().equalsIgnoreCase(textoBusqueda) ||
-                        (t.getNombre() != null && t.getNombre().toLowerCase().contains(textoBusqueda.toLowerCase()))) {
-                    matchingClases.addAll(claseRepository.findByTipoOrderByFechaAscHoraAsc(t));
+        List<Clase> clases = new ArrayList<>();
+
+        String filtroSeguro = (tipoFiltro != null) ? tipoFiltro.toLowerCase() : "";
+
+        // Búsqueda con switch
+        switch (filtroSeguro) {
+            case "tipo":
+                String textoMinusculas = textoBusqueda.toLowerCase();
+                for (TipoClase tipoEnum : TipoClase.values()) {
+
+                    boolean coincideNombreEnum = tipoEnum.name().equalsIgnoreCase(textoBusqueda);
+                    boolean tieneNombre = tipoEnum.getNombre() != null;
+                    boolean coincideAtributo = tieneNombre && tipoEnum.getNombre().toLowerCase().contains(textoMinusculas);
+
+                    if (coincideNombreEnum || coincideAtributo) {
+                        clases.addAll(claseRepository.findByTipoOrderByFechaAscHoraAsc(tipoEnum));
+                    }
                 }
-            }
-            clases = matchingClases;
-        } else if ("deporte".equalsIgnoreCase(tipoFiltro)) {
-            clases = claseRepository.findByDeporteNombreContainingIgnoreCase(textoBusqueda);
-        } else if ("entrenador".equalsIgnoreCase(tipoFiltro)) {
-            clases = claseRepository.findByEntrenadorNombreContainingIgnoreCase(textoBusqueda);
-        } else {
-            clases = claseRepository.findAll();
+                break;
+
+            case "deporte":
+                clases = claseRepository.findByDeporteNombreContainingIgnoreCase(textoBusqueda);
+                break;
+
+            case "entrenador":
+                clases = claseRepository.findByEntrenadorNombreContainingIgnoreCase(textoBusqueda);
+                break;
+
+            default:
+                // Si no tiene filtro, devolvemos todas las clases
+                clases = claseRepository.findAll();
+                break;
         }
 
-        return clases.stream().map(this::mapToDTO).collect(Collectors.toList());
+        // Convertimos a DTO
+        List<ClaseDTO> listaResultadoDTO = new ArrayList<>();
+        for (Clase clase : clases) {
+            ClaseDTO dto = this.mapToDTO(clase);
+            listaResultadoDTO.add(dto);
+        }
+
+        return listaResultadoDTO;
     }
 
     public ClaseDTO mapToDTO(Clase clase) {

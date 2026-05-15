@@ -5,6 +5,7 @@ import com.example.gimnasiougr.Repositories.CupoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,10 +20,14 @@ public class CupoService {
     }
 
     public List<CupoDTO> buscarPorBono(Long bonoId) {
-        return cupoRepository.findByBonoId(bonoId)
-                .stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
+        List<Cupo> listaCupos = cupoRepository.findByBonoId(bonoId);
+        List<CupoDTO> listaResultadoDTO = new ArrayList<>();
+
+        for (Cupo cupo : listaCupos) {
+            CupoDTO dto = this.mapToDTO(cupo);
+            listaResultadoDTO.add(dto);
+        }
+        return listaResultadoDTO;
     }
 
     public CupoDTO mapToDTO(Cupo cupo) {

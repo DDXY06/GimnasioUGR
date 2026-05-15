@@ -17,4 +17,6 @@ public interface BonoRepository extends JpaRepository<Bono, Long> {
     List<Bono> findByClienteId(Long clienteId);
 
     boolean existsByClienteIdAndTipo(Long id, TipoBono tipoBono);
+
+    List<Bono> findByTipo(TipoBono tipoCoincidente);
 }
