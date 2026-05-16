@@ -135,10 +135,17 @@
                         </td>
                         <td th:text="${c.maxCupos}"></td>
                         <td class="text-center">
+                            <a th:if="${c.tipo != null and c.tipo.name() == 'UNO'}"
+                               th:href="@{/admin/clases/{id}/clientes(id=${c.id})}"
+                               class="btn btn-sm btn-info text-dark rounded-pill me-1" title="Gestionar Clientes">
+                                <i class="bi-people"></i> Clientes
+                            </a>
+
                             <a th:href="@{/admin/clases/editar/{id}(id=${c.id})}"
                                class="btn btn-sm btn-warning text-dark rounded-pill me-1" title="Editar">
                                 <i class="bi-pencil"></i> Editar
                             </a>
+
                             <a th:href="@{/admin/clases/eliminar/{id}(id=${c.id})}"
                                class="btn btn-sm btn-danger rounded-pill" title="Eliminar"
                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta clase?');">

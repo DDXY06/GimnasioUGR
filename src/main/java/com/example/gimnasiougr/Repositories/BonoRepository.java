@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BonoRepository extends JpaRepository<Bono, Long> {
@@ -19,4 +20,6 @@ public interface BonoRepository extends JpaRepository<Bono, Long> {
     boolean existsByClienteIdAndTipo(Long id, TipoBono tipoBono);
 
     List<Bono> findByTipo(TipoBono tipoCoincidente);
+
+    Optional<Bono> findFirstByClienteIdAndMaxCuposGreaterThan(Long clienteId, int maxCupos);
 }

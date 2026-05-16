@@ -148,4 +148,26 @@ public class ClienteService {
 
         return cliente;
     }
+
+    public List<ClienteDTO> listarClientesPorListaCupos(List<CupoDTO> listaCupos){
+        ArrayList<ClienteDTO> listaClientes = new ArrayList<>();
+
+        for(CupoDTO cupo: listaCupos){
+            listaClientes.add(  this.buscarPorId( cupo.getClienteId() )  );
+        }
+
+        return listaClientes;
+    }
+
+    public List<ClienteDTO> listarClientesDisponiblesParaClase(Long claseId) {
+        List<Cliente> clientesDisponibles = clienteRepository.findClientesNoInscritosEnClase(claseId);
+        List<ClienteDTO> clientesDTO = new ArrayList<>();
+
+        for (Cliente cliente : clientesDisponibles) {
+            ClienteDTO dto = mapToDTO(cliente);
+            clientesDTO.add(dto);
+        }
+
+        return clientesDTO;
+    }
 }

@@ -1,13 +1,12 @@
 package com.example.gimnasiougr.Services;
 
 import com.example.gimnasiougr.Models.*;
-import com.example.gimnasiougr.Repositories.ClaseRepository;
-import com.example.gimnasiougr.Repositories.DeporteRepository;
-import com.example.gimnasiougr.Repositories.EntrenadorRepository;
+import com.example.gimnasiougr.Repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +19,9 @@ public class ClaseService {
     private final DeporteRepository deporteRepository;
     private final EntrenadorRepository entrenadorRepository;
     private final CupoService cupoService;
+    private final ClienteRepository clienteRepository;
+    private final CupoRepository cupoRepository;
+    private final BonoRepository bonoRepository;
 
     public List<ClaseDTO> listarTodos() {
         List<ClaseDTO> claseDTOs = new ArrayList<>();
@@ -153,5 +155,31 @@ public class ClaseService {
         }
 
         return clase;
+    }
+
+    @Transactional
+    public void addCliente(Long claseId, Long clienteId) {
+
+        Clase clase = claseRepository.findById(claseId).orElseThrow();
+        Cliente cliente = clienteRepository.findById(clienteId).orElseThrow();
+
+        // Buscamos un bono del cliente que aún tenga usos disponibles (max_Cupos > 0)
+        Bono bono = bonoRepository.findFirstByClienteIdAndMaxCuposGreaterThan(clienteId, 0).orElseThrow();
+
+        // Crear y guardar el Cupo
+        Cupo cupo = new Cupo();
+        cupo.setClase(clase);
+        cupo.setUsuario(cliente);
+        cupo.setBono(bono);
+        cupo.setEstado(Estado.CONFIRMADO);
+        cupo.setFechaUso(LocalDateTime.now());
+
+        cupoRepository.save(cupo);
+
+    }
+
+    public void removeCliente(Long claseId, Long clienteId) {
+        Cupo cupo = cupoRepository.findByClase_IdAndUsuario_Id(claseId, clienteId);
+        cupoRepository.delete(cupo);
     }
 }

@@ -53,4 +53,16 @@ public class CupoService {
         dto.setFechaUso(cupo.getFechaUso());
         return dto;
     }
+
+    public List<CupoDTO> buscarPorIdClase(Long claseId){
+        List<Cupo> listarCupos = cupoRepository.findByClaseId(claseId);
+        List<CupoDTO> listarCuposDTO = new ArrayList<>();
+
+        for (Cupo cupo : listarCupos) {
+            CupoDTO dto = this.mapToDTO(cupo);
+            listarCuposDTO.add(dto);
+        }
+        return listarCuposDTO;
+
+    }
 }

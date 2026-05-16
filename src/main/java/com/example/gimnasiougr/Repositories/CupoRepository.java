@@ -21,4 +21,10 @@ public interface CupoRepository extends JpaRepository<Cupo, Long> {
     long countByClase(Clase clase);
 
     long countByBono(Bono b);
+
+    List<Cupo> findByClaseId(Long claseId);
+
+    Cupo findByClase_IdAndUsuario_Id(Long claseId, Long clienteId);
+
+    long countByClaseId(Long claseId);
 }

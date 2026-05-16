@@ -2,7 +2,7 @@ package com.example.gimnasiougr.Controllers.Admin;
 
 import java.util.List;
 
-import com.example.gimnasiougr.Models.Deporte;
+import com.example.gimnasiougr.Models.*;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.gimnasiougr.Models.ClaseDTO;
-import com.example.gimnasiougr.Models.TipoClase;
 import com.example.gimnasiougr.Services.ClaseService;
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +20,8 @@ public class AdminClaseController {
     private final ClaseService claseService;
     private final com.example.gimnasiougr.Services.DeporteService deporteService;
     private final com.example.gimnasiougr.Services.EntrenadorService entrenadorService;
+    private final com.example.gimnasiougr.Services.CupoService cupoService;
+    private final com.example.gimnasiougr.Services.ClienteService clienteService;
 
     @ModelAttribute("tiposClase")
     public List<TipoClase> tiposClase() {
@@ -130,4 +130,49 @@ public class AdminClaseController {
 
         return "redirect:/admin/clases/";
     }
+
+    @GetMapping("/{idClase}/clientes")
+    public String listarClientesClase(@PathVariable("idClase") Long id, Model model) {
+
+        ClaseDTO claseDTO = claseService.buscarPorId(id);
+        List<CupoDTO> cuposDTO = cupoService.buscarPorIdClase(id);
+        List<ClienteDTO> clientesDTO = clienteService.listarClientesPorListaCupos(cuposDTO);
+        List<ClienteDTO> clientesDisponibles = clienteService.listarClientesDisponiblesParaClase(id);
+
+        model.addAttribute("clase", claseDTO);
+        model.addAttribute("clientesInscritos", clientesDTO);
+        model.addAttribute("clientesDisponibles", clientesDisponibles);
+
+        return "admin/clase-clientes";
+    }
+
+    @PostMapping("/{idCliente}/clientes/add")
+    public String addCliente(@PathVariable Long idCliente,
+                                @RequestParam Long clienteId,
+                                RedirectAttributes redirectAttributes) {
+        try {
+            claseService.addCliente(idCliente, clienteId);
+            redirectAttributes.addFlashAttribute("exito", "Cliente inscrito correctamente en la clase.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al inscribir cliente: " + e.getMessage());
+        }
+        return "redirect:/admin/clases/";
+    }
+
+
+    @PostMapping("/{idClase}/clientes/remove/{idCliente}")
+    public String removeCliente(@PathVariable Long idClase,
+                                @PathVariable Long idCliente,
+                                RedirectAttributes redirectAttributes) {
+        try {
+            claseService.removeCliente(idClase, idCliente); // o desinscribirCliente
+            redirectAttributes.addFlashAttribute("exito", "Cliente eliminado de la clase correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar cliente: " + e.getMessage());
+        }
+        return "redirect:/admin/clases/";
+    }
+
+
+
 }
