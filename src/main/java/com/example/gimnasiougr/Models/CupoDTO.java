@@ -15,7 +15,7 @@ import java.time.LocalTime;
 public class CupoDTO {
     private Long id;
 
-    @NotNull(message = "Introduzca un ID de usuario")
+    @NotNull(message = "Introduzca un ID de cliente")
     private Long clienteId;
 
     @NotNull(message = "Introduzca un ID de clase")

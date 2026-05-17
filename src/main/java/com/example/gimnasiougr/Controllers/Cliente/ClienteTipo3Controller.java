@@ -27,29 +27,25 @@ public class ClienteTipo3Controller {
         Usuario usuario = LoginController.usuarioLogeadoGlobal;
         if (usuario == null) return "redirect:/";
 
-        List<ClaseDTO> clasesDTO = clienteClasesService.obtenerClasesTipo3ConEstado(usuario);
+        List<ClaseDTO> clasesDTO = clienteClasesService.obtenerClasesTipo3ConEstado(usuario.getId());
 
         model.addAttribute("clases", clasesDTO);
         return "cliente/clases-tipo3";
     }
 
-
     @PostMapping("/apuntarse-tipo3")
     public String apuntarse(@RequestParam Long claseId, RedirectAttributes redirectAttributes) {
-
         Usuario usuario = LoginController.usuarioLogeadoGlobal;
         if (usuario == null) return "redirect:/";
 
         try {
-            clienteClasesService.inscribirClaseTipo3(usuario, claseId);
-
+            clienteClasesService.inscribirClaseTipo3(usuario.getId(), claseId);
             redirectAttributes.addFlashAttribute("exito", "¡Te has apuntado correctamente!");
 
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) { // MEJORA: Capturar la excepción específica de negocio, NO RuntimeException
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
         return "redirect:/cliente/clases-tipo3";
     }
-
 }

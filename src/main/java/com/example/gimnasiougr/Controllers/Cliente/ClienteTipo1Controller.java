@@ -1,6 +1,7 @@
 package com.example.gimnasiougr.Controllers.Cliente;
 
 import com.example.gimnasiougr.Controllers.LoginController;
+import com.example.gimnasiougr.Models.SolicitudCambioDTO;
 import com.example.gimnasiougr.Models.Usuario;
 import com.example.gimnasiougr.Services.ClienteClasesService;
 import lombok.RequiredArgsConstructor;
@@ -19,30 +20,25 @@ public class ClienteTipo1Controller {
     @GetMapping("/clases-tipo1")
     public String clasesTipo1(Model model) {
 
-        Usuario usuarioLogeado = LoginController.usuarioLogeadoGlobal;
-        if (usuarioLogeado == null) return "redirect:/";
+        Usuario usuario = LoginController.usuarioLogeadoGlobal;
+        if (usuario == null) return "redirect:/";
 
-        model.addAttribute("clases", clasesService.obtenerClasesTipo1ConEstado(usuarioLogeado));
-
+        model.addAttribute("clases", clasesService.obtenerClasesTipo1ConEstado(usuario.getId()));
         return "cliente/clases-tipo1";
     }
 
     @PostMapping("/solicitar-cambio")
-    public String solicitarCambio(@RequestParam Long cupoId,
-                                  @RequestParam Long claseCambioId,
+    public String solicitarCambio(@ModelAttribute SolicitudCambioDTO solicitud,
                                   RedirectAttributes redirectAttributes) {
-
-        Usuario usuarioLogeado = LoginController.usuarioLogeadoGlobal;
-        if (usuarioLogeado == null) return "redirect:/";
+        Usuario usuario = LoginController.usuarioLogeadoGlobal;
+        if (usuario == null) return "redirect:/";
 
         try {
-            clasesService.procesarSolicitudCambio(usuarioLogeado, cupoId, claseCambioId);
-            redirectAttributes.addFlashAttribute("exito", "Solicitud de cambio enviada con éxito.");
+            clasesService.procesarSolicitudCambioClaseTipo1(usuario.getId(), solicitud.getCupoId(), solicitud.getClaseCambioId());
+            redirectAttributes.addFlashAttribute("exito", "Solicitud enviada con éxito.");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-
-        // Corregido: volvemos a la misma página, no a horario-tipo1
         return "redirect:/cliente/clases-tipo1";
     }
 }

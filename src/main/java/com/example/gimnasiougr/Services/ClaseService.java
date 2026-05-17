@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -101,6 +100,34 @@ public class ClaseService {
         return listaResultadoDTO;
     }
 
+    @Transactional
+    public void addCliente(Long claseId, Long clienteId) {
+
+        Clase clase = claseRepository.findById(claseId).orElseThrow();
+        Cliente cliente = clienteRepository.findById(clienteId).orElseThrow();
+
+        // Buscamos un bono del cliente que aún tenga usos disponibles (max_Cupos > 0)
+        Bono bono = bonoRepository.findFirstByClienteIdAndMaxCuposGreaterThan(clienteId, 0).orElseThrow();
+
+        // Crear y guardar el Cupo
+        Cupo cupo = new Cupo();
+        cupo.setClase(clase);
+        cupo.setCliente(cliente);
+        cupo.setBono(bono);
+        cupo.setEstado(Estado.CONFIRMADO);
+        cupo.setFechaUso(LocalDateTime.now());
+
+        cupoRepository.save(cupo);
+
+    }
+
+    public void removeCliente(Long claseId, Long clienteId) {
+        Cupo cupo = cupoRepository.findByClienteIdAndClaseId(clienteId, claseId)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró la inscripción (cupo) de este cliente en la clase especificada."));
+        cupoRepository.delete(cupo);
+    }
+
+
     public ClaseDTO mapToDTO(Clase clase) {
         if (clase == null) return null;
 
@@ -155,31 +182,5 @@ public class ClaseService {
         }
 
         return clase;
-    }
-
-    @Transactional
-    public void addCliente(Long claseId, Long clienteId) {
-
-        Clase clase = claseRepository.findById(claseId).orElseThrow();
-        Cliente cliente = clienteRepository.findById(clienteId).orElseThrow();
-
-        // Buscamos un bono del cliente que aún tenga usos disponibles (max_Cupos > 0)
-        Bono bono = bonoRepository.findFirstByClienteIdAndMaxCuposGreaterThan(clienteId, 0).orElseThrow();
-
-        // Crear y guardar el Cupo
-        Cupo cupo = new Cupo();
-        cupo.setClase(clase);
-        cupo.setUsuario(cliente);
-        cupo.setBono(bono);
-        cupo.setEstado(Estado.CONFIRMADO);
-        cupo.setFechaUso(LocalDateTime.now());
-
-        cupoRepository.save(cupo);
-
-    }
-
-    public void removeCliente(Long claseId, Long clienteId) {
-        Cupo cupo = cupoRepository.findByClase_IdAndUsuario_Id(claseId, clienteId);
-        cupoRepository.delete(cupo);
     }
 }

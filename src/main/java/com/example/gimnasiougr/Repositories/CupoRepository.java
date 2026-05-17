@@ -9,22 +9,18 @@ import java.util.Optional;
 
 @Repository
 public interface CupoRepository extends JpaRepository<Cupo, Long> {
+
     long countByBonoId(Long bonoId);
+
+    long countByClaseId(Long claseId);
+
     List<Cupo> findByBonoId(Long bonoId);
-
-    List<Cupo> findByUsuarioIdAndClaseTipo(Long id, TipoClase tipoClase);
-
-    Optional<Cupo> findByUsuarioIdAndClaseId(Long id, Long id1);
-
-    boolean existsByUsuarioAndClase(Cliente cliente, Clase clase);
-
-    long countByClase(Clase clase);
-
-    long countByBono(Bono b);
 
     List<Cupo> findByClaseId(Long claseId);
 
-    Cupo findByClase_IdAndUsuario_Id(Long claseId, Long clienteId);
+    List<Cupo> findByClienteIdAndClaseTipo(Long id, TipoClase tipoClase);
 
-    long countByClaseId(Long claseId);
+    Optional<Cupo> findByClienteIdAndClaseId(Long idCliente, Long idClase);
+
+    boolean existsByClienteIdAndClaseId(Long clienteId, Long claseId);
 }

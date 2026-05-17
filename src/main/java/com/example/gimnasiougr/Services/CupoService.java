@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,12 +29,24 @@ public class CupoService {
         return listaResultadoDTO;
     }
 
+    public List<CupoDTO> buscarPorIdClase(Long claseId){
+        List<Cupo> listarCupos = cupoRepository.findByClaseId(claseId);
+        List<CupoDTO> listarCuposDTO = new ArrayList<>();
+
+        for (Cupo cupo : listarCupos) {
+            CupoDTO dto = this.mapToDTO(cupo);
+            listarCuposDTO.add(dto);
+        }
+        return listarCuposDTO;
+
+    }
+
     public CupoDTO mapToDTO(Cupo cupo) {
         if (cupo == null) return null;
         CupoDTO dto = new CupoDTO();
         dto.setId(cupo.getId());
-        if (cupo.getUsuario() != null) {
-            dto.setClienteId(cupo.getUsuario().getId());
+        if (cupo.getCliente() != null) {
+            dto.setClienteId(cupo.getCliente().getId());
         }
         if (cupo.getClase() != null) {
             dto.setClaseId(cupo.getClase().getId());
@@ -52,17 +63,5 @@ public class CupoService {
         dto.setEstado(cupo.getEstado());
         dto.setFechaUso(cupo.getFechaUso());
         return dto;
-    }
-
-    public List<CupoDTO> buscarPorIdClase(Long claseId){
-        List<Cupo> listarCupos = cupoRepository.findByClaseId(claseId);
-        List<CupoDTO> listarCuposDTO = new ArrayList<>();
-
-        for (Cupo cupo : listarCupos) {
-            CupoDTO dto = this.mapToDTO(cupo);
-            listarCuposDTO.add(dto);
-        }
-        return listarCuposDTO;
-
     }
 }

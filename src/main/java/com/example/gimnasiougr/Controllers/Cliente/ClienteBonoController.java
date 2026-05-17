@@ -2,10 +2,10 @@ package com.example.gimnasiougr.Controllers.Cliente;
 
 import com.example.gimnasiougr.Controllers.LoginController;
 import com.example.gimnasiougr.Models.BonoDTO;
-import com.example.gimnasiougr.Models.Cliente;
+import com.example.gimnasiougr.Models.ClienteDTO;
 import com.example.gimnasiougr.Models.Usuario;
-import com.example.gimnasiougr.Repositories.ClienteRepository;
 import com.example.gimnasiougr.Services.BonoService;
+import com.example.gimnasiougr.Services.ClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,20 +20,20 @@ import java.util.List;
 public class ClienteBonoController {
 
     private final BonoService bonoService;
-    private final ClienteRepository clienteRepository;
+    private final ClienteService clienteService;
 
     @GetMapping("/mis-bonos")
     public String misBonos(Model model) {
-        Usuario usuarioLogeado = LoginController.usuarioLogeadoGlobal;
-        if (usuarioLogeado == null) {
+        Usuario usuario = LoginController.usuarioLogeadoGlobal;
+        if (usuario == null) {
             return "redirect:/";
         }
 
-        Cliente cliente = clienteRepository.findByUsuario(usuarioLogeado).orElseThrow();
-        List<BonoDTO> bonos = bonoService.buscarPorClienteId(cliente.getId());
+        ClienteDTO clienteDTO = clienteService.buscarPorUsuarioId(usuario.getId()) ;
+        List<BonoDTO> bonos = bonoService.buscarPorClienteId(clienteDTO.getId());
 
         model.addAttribute("bonos", bonos);
-        model.addAttribute("nombreCliente", cliente.getNombre());
+        model.addAttribute("nombreCliente", clienteDTO.getNombre());
 
         return "cliente/mis-bonos";
     }
