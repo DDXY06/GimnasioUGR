@@ -43,25 +43,37 @@ public class CupoService {
 
     public CupoDTO mapToDTO(Cupo cupo) {
         if (cupo == null) return null;
+
         CupoDTO dto = new CupoDTO();
         dto.setId(cupo.getId());
+
+        dto.setEstado(cupo.getEstado());
+        dto.setFechaUso(cupo.getFechaUso());
+
         if (cupo.getCliente() != null) {
             dto.setClienteId(cupo.getCliente().getId());
         }
+
         if (cupo.getClase() != null) {
             dto.setClaseId(cupo.getClase().getId());
             dto.setTipoClase(cupo.getClase().getTipo());
             dto.setFechaClase(cupo.getClase().getFecha());
             dto.setHoraClase(cupo.getClase().getHora());
+
+            dto.setEstadoClase(cupo.getClase().getEstado());
+            if (cupo.getClase().getEntrenador() != null) {
+                dto.setNombreEntrenador(cupo.getClase().getEntrenador().getNombre());
+            }
+
             if (cupo.getClase().getDeporte() != null) {
                 dto.setNombreDeporte(cupo.getClase().getDeporte().getNombre());
             }
         }
+
         if (cupo.getBono() != null) {
             dto.setBonoId(cupo.getBono().getId());
         }
-        dto.setEstado(cupo.getEstado());
-        dto.setFechaUso(cupo.getFechaUso());
+
         return dto;
     }
 }
