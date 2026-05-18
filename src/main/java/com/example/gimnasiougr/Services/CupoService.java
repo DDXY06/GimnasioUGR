@@ -1,18 +1,22 @@
 package com.example.gimnasiougr.Services;
 
 import com.example.gimnasiougr.Models.*;
+import com.example.gimnasiougr.Repositories.BonoRepository;
 import com.example.gimnasiougr.Repositories.CupoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CupoService {
 
     private final CupoRepository cupoRepository;
+    private final BonoRepository bonoRepository;
 
     public long contarPorBono(Long bonoId) {
         return cupoRepository.countByBonoId(bonoId);
@@ -39,6 +43,26 @@ public class CupoService {
         }
         return listarCuposDTO;
 
+    }
+
+    @Transactional
+    public void aceptarCupoTipo2(Cupo cupo){
+        List<Bono> bonos = bonoRepository.findByTipoOrderByFechaCompraAsc(TipoBono.DOS);
+        for (Bono bono : bonos) {
+            long cuposUsados = cupoRepository.countByBonoId(bono.getId());
+            if (cuposUsados < bono.getMaxCupos()) {
+                cupo.setBono(bono);
+                cupo.setEstado(Estado.CONFIRMADO);
+                cupoRepository.save(cupo);
+                break;
+            }
+        }
+    }
+
+    @Transactional
+    public void rechazarCupoTipo2(Cupo cupo){
+        cupo.setEstado(Estado.CANCELADO);
+        cupoRepository.save(cupo);
     }
 
     public CupoDTO mapToDTO(Cupo cupo) {

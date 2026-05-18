@@ -22,7 +22,6 @@ import java.util.Optional;
 public class EntrenadorDefaultController {
     private final EntrenadorRepository entrenadorRepository;
 
-
     @GetMapping({"", "/","/index"})
     public String index(Model model) {
         Usuario usuario = LoginController.usuarioLogeadoGlobal;

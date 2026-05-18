@@ -3,6 +3,7 @@ package com.example.gimnasiougr.Models;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -21,6 +22,9 @@ public class SolicitudCambioDTO {
 
     @NotNull(message = "Introduzca un ID de clase de cambio")
     private Long claseCambioId;
+
+    private LocalDate fechaClaseOriginal;
+    private LocalDate fechaClaseCambio;
 
     @NotNull(message = "Introduzca un estado")
     private Estado estado;
