@@ -68,12 +68,17 @@
 <section class="page-section mt-5 pt-5">
     <div class="container px-4 px-lg-5">
 
-        <div class="mb-4">
-            <h2 class="mt-0 mb-1">Mis Bonos Activos</h2>
-            <p class="text-muted mb-0">
-                Bienvenido/a, <span th:text="${nombreCliente}" class="fw-bold">Usuario</span>.
-                Aquí puedes ver el estado de tus bonos comprados.
-            </p>
+        <div class="d-flex justify-content-between align-items-end mb-2">
+            <idv>
+                <h2 class="mt-0 mb-1">Mis Bonos Activos</h2>
+                <p class="text-muted mb-0">
+                    Bienvenido/a, <span th:text="${nombreCliente}" class="fw-bold">Usuario</span>.
+                    Aquí puedes ver el estado de tus bonos comprados.
+                </p>
+            </idv>
+            <a th:href="@{/cliente/index}" class="btn btn-outline-primary btn-sm rounded-pill px-3 mb-1">
+                <i class="bi-arrow-left me-1"></i>Volver
+            </a>
 
         </div>
         <hr class="divider divider-start mb-5" style="max-width: 5rem; margin-left: 0;" />

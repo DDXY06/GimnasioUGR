@@ -78,7 +78,6 @@
                         <th>Entrenador</th>
                         <th class="text-center">Fecha</th>
                         <th class="text-center">Hora</th>
-                        <th class="text-center">Plazas</th>
                         <th class="text-end pe-4">Acción</th>
                     </tr>
                     </thead>
@@ -93,9 +92,6 @@
                         <td th:text="${clase.nombreEntrenador}">Entrenador</td>
                         <td class="text-center" th:text="${#temporals.format(clase.fecha, 'dd/MM/yyyy')}">Fecha</td>
                         <td class="text-center" th:text="${clase.hora}">Hora</td>
-                        <td class="text-center">
-                            <span th:text="${clase.cuposOcupados}">0</span> / <span th:text="${clase.maxCupos}">20</span>
-                        </td>
                         <td class="text-end pe-4">
                             <div th:if="${clase.inscrito}">
                                 <button th:if="${clase.cambioSolicitado}" class="btn btn-sm btn-secondary" disabled>

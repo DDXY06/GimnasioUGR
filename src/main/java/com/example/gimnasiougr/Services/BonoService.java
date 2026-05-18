@@ -105,6 +105,36 @@ public class BonoService {
         return listaBonoDto;
     }
 
+    public BonoDTO buscarDetalleConCupos(Long id) {
+        Bono bono = bonoRepository.findById(id).orElse(null);
+
+        if (bono == null) {
+            return null;
+        }
+
+        // Si existe, lo transformamos a DTO
+        BonoDTO bonoDto = mapToDTO(bono);
+
+        // Le añadimos los cupos
+        bonoDto.setCupos(cupoService.buscarPorBono(bono.getId()));
+
+        return bonoDto;
+    }
+
+    public List<BonoDTO> buscarPorClienteId(Long clienteId) {
+        List<Bono> bonosDelCliente = bonoRepository.findByClienteId(clienteId);
+
+        // Creamos la lista vacía donde guardaremos los DTOs
+        List<BonoDTO> listaResultado = new ArrayList<>();
+
+        for (Bono bono : bonosDelCliente) {
+            BonoDTO dto = mapToDTO(bono);
+            listaResultado.add(dto);
+        }
+
+        return listaResultado;
+    }
+
     public BonoDTO mapToDTO(Bono bono) {
         if (bono == null) return null;
         BonoDTO dto = new BonoDTO();
@@ -142,33 +172,5 @@ public class BonoService {
         return bono;
     }
 
-    public BonoDTO buscarDetalleConCupos(Long id) {
-        Bono bono = bonoRepository.findById(id).orElse(null);
 
-        if (bono == null) {
-            return null;
-        }
-
-        // Si existe, lo transformamos a DTO
-        BonoDTO bonoDto = mapToDTO(bono);
-
-        // Le añadimos los cupos
-        bonoDto.setCupos(cupoService.buscarPorBono(bono.getId()));
-
-        return bonoDto;
-    }
-
-    public List<BonoDTO> buscarPorClienteId(Long clienteId) {
-        List<Bono> bonosDelCliente = bonoRepository.findByClienteId(clienteId);
-
-        // Creamos la lista vacía donde guardaremos los DTOs
-        List<BonoDTO> listaResultado = new ArrayList<>();
-
-        for (Bono bono : bonosDelCliente) {
-            BonoDTO dto = mapToDTO(bono);
-            listaResultado.add(dto);
-        }
-
-        return listaResultado;
-    }
 }
