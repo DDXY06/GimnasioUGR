@@ -52,7 +52,9 @@ public class AdminClienteController {
     public String editarForm(@PathVariable Long id, Model model) {
         ClienteDTO clienteDTO = clienteService.buscarPorId(id);
 
-        if (clienteDTO == null) return "redirect:/admin/clientes";
+        if (clienteDTO == null){
+            return "redirect:/admin/clientes";
+        }
 
         model.addAttribute("cliente", clienteDTO);
         model.addAttribute("esNuevo", false);

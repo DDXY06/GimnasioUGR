@@ -66,6 +66,35 @@ public class ClienteService {
         return clientes.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
+    public ClienteDTO buscarPorUsuarioId(Long usuarioId) {
+        Cliente cliente = clienteRepository.findByUsuarioId(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró ningún cliente asociado al ID de usuario: " + usuarioId));
+
+        return this.mapToDTO(cliente);
+    }
+
+    public List<ClienteDTO> listarClientesPorListaCupos(List<CupoDTO> listaCupos){
+        ArrayList<ClienteDTO> listaClientes = new ArrayList<>();
+
+        for(CupoDTO cupo: listaCupos){
+            listaClientes.add(  this.buscarPorId( cupo.getClienteId() )  );
+        }
+
+        return listaClientes;
+    }
+
+    public List<ClienteDTO> listarClientesDisponiblesParaClase(Long claseId) {
+        List<Cliente> clientesDisponibles = clienteRepository.findClientesNoInscritosEnClase(claseId);
+        List<ClienteDTO> clientesDTO = new ArrayList<>();
+
+        for (Cliente cliente : clientesDisponibles) {
+            ClienteDTO dto = mapToDTO(cliente);
+            clientesDTO.add(dto);
+        }
+
+        return clientesDTO;
+    }
+
     public ClienteDTO mapToDTO(Cliente cliente) {
         if (cliente == null) return null;
         ClienteDTO cdto = new ClienteDTO();

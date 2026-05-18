@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Horario Grupal - UGRFit</title>
+
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <style>
+        .divider-start { border-top: 3px solid #0d6efd; opacity: 1; }
+        .card { border: none; }
+        /* Estilo para que la etiqueta sea pequeña y elegante */
+        .badge-inscrito {
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body id="page-top" class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand text-primary fw-bold" th:href="@{/cliente/index}">
+            <i class="bi-person-circle me-2"></i>UGRFit | Área de Socio
+        </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item"><a class="nav-link text-dark" th:href="@{/cliente/index}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link text-dark" th:href="@{/cliente/mis-bonos}">Mis Bonos</a></li>
+                <li class="nav-item"><a class="nav-link text-primary fw-semibold" th:href="@{/cliente/clases-tipo1}">Horario Grupal</a></li>
+                <li class="nav-item"><a class="nav-link text-dark" th:href="@{/cliente/clases-tipo2}">Clase Individual</a></li>
+                <li class="nav-item"><a class="nav-link text-dark" th:href="@{/cliente/clases-tipo3}">Clases Especiales</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" th:href="@{/logout}">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="page-section mt-5 pt-5">
+    <div class="container px-4 px-lg-5">
+
+        <div class="d-flex justify-content-between align-items-end mb-2">
+            <div>
+                <h2 class="mt-0 mb-1">Horario Grupal</h2>
+                <p class="text-muted mb-0">Consulta las clases disponibles y gestiona tus inscripciones.</p>
+            </div>
+            <a th:href="@{/cliente/index}" class="btn btn-outline-primary btn-sm rounded-pill px-3 mb-1">
+                <i class="bi-arrow-left me-1"></i>Volver
+            </a>
+        </div>
+        <hr class="divider divider-start mb-5" style="max-width: 5rem; margin-left: 0;" />
+
+        <div th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${exito}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4">Deporte</th>
+                        <th>Entrenador</th>
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Hora</th>
+                        <th class="text-center">Plazas</th>
+                        <th class="text-end pe-4">Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="clase : ${clases}" th:classappend="${clase.inscrito} ? 'table-primary' : ''">
+                        <td class="ps-4">
+                            <span class="fw-bold" th:text="${clase.nombreDeporte}">Deporte</span>
+                            <span th:if="${clase.inscrito}" class="badge rounded-pill bg-primary ms-2 badge-inscrito shadow-sm">
+                                INSCRITO
+                            </span>
+                        </td>
+                        <td th:text="${clase.nombreEntrenador}">Entrenador</td>
+                        <td class="text-center" th:text="${#temporals.format(clase.fecha, 'dd/MM/yyyy')}">Fecha</td>
+                        <td class="text-center" th:text="${clase.hora}">Hora</td>
+                        <td class="text-center">
+                            <span th:text="${clase.cuposOcupados}">0</span> / <span th:text="${clase.maxCupos}">20</span>
+                        </td>
+                        <td class="text-end pe-4">
+                            <div th:if="${clase.inscrito}">
+                                <button th:if="${clase.cambioSolicitado}" class="btn btn-sm btn-secondary" disabled>
+                                    <i class="bi bi-clock-history me-1"></i>Cambio solicitado
+                                </button>
+
+                                <button th:unless="${clase.cambioSolicitado}"
+                                        type="button"
+                                        class="btn btn-sm btn-warning fw-bold shadow-sm"
+                                        data-bs-toggle="modal"
+                                        th:data-bs-target="|#modalCambio-${clase.cupoId}|">
+                                    Solicitar cambio
+                                </button>
+                            </div>
+                            <span th:unless="${clase.inscrito}" class="text-muted small">—</span>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(clases)}">
+                        <td colspan="6" class="text-center text-muted py-4">No hay clases tipo 1 disponibles.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <th:block th:each="clase : ${clases}">
+            <div th:if="${clase.inscrito and !clase.cambioSolicitado}"
+                 class="modal fade"
+                 th:id="|modalCambio-${clase.cupoId}|"
+                 tabindex="-1"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content rounded-4 border-0 shadow">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title fw-bold">Cambiar clase: <span th:text="${clase.nombreDeporte}" class="text-primary"></span></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form th:action="@{/cliente/solicitar-cambio}" method="post">
+                            <div class="modal-body py-0">
+                                <input type="hidden" name="cupoId" th:value="${clase.cupoId}"/>
+                                <p class="small text-muted mb-3">Selecciona a qué sesión quieres mover tu plaza:</p>
+                                <select name="claseCambioId" class="form-select bg-light border-0 py-2" required>
+                                    <option value="" disabled selected>Elige una clase de destino...</option>
+                                    <th:block th:each="destino : ${clases}">
+                                        <option th:if="${!destino.inscrito}"
+                                                th:value="${destino.id}"
+                                                th:text="${destino.nombreDeporte + ' — ' + #temporals.format(destino.fecha, 'dd/MM/yyyy') + ' ' + destino.hora}"></option>
+                                    </th:block>
+                                </select>
+                            </div>
+                            <div class="modal-footer border-0 p-3">
+                                <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold">Confirmar solicitud</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+
+    </div>
+</section>
+
+<footer class="bg-light py-5 mt-5">
+    <div class="container px-4 px-lg-5 text-center">
+        <img th:src="@{/assets/img/UGR-Logo.png}" alt="Logo UGR" style="max-height: 70px;" class="img-fluid opacity-75 mb-3">
+        <div class="small text-muted">Copyright &copy; 2026 - UGRFit | El Gimnasio de la Universidad de Granada</div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

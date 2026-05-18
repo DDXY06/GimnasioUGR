@@ -1,8 +1,12 @@
 package com.example.gimnasiougr.Controllers.Cliente;
 
+import com.example.gimnasiougr.Controllers.LoginController;
 import com.example.gimnasiougr.Models.BonoDTO;
+import com.example.gimnasiougr.Models.ClienteDTO;
+import com.example.gimnasiougr.Models.Usuario;
 import com.example.gimnasiougr.Services.BonoService;
-import jakarta.servlet.http.HttpSession;
+import com.example.gimnasiougr.Services.ClienteService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,23 +16,25 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/cliente")
+@RequiredArgsConstructor
 public class ClienteBonoController {
 
     private final BonoService bonoService;
-
-    public ClienteBonoController(BonoService bonoService) {
-        this.bonoService = bonoService;
-    }
+    private final ClienteService clienteService;
 
     @GetMapping("/mis-bonos")
-    public String misBonos(HttpSession session, Model model) {
-        Long clienteId = (Long) session.getAttribute("clienteId");
-        String nombreCliente = (String) session.getAttribute("nombreCliente");
+    public String misBonos(Model model) {
+        Usuario usuario = LoginController.usuarioLogeadoGlobal;
+        if (usuario == null) {
+            return "redirect:/";
+        }
 
-        List<BonoDTO> bonos = bonoService.buscarPorClienteId(clienteId);
+        ClienteDTO clienteDTO = clienteService.buscarPorUsuarioId(usuario.getId()) ;
+        List<BonoDTO> bonos = bonoService.buscarPorClienteId(clienteDTO.getId());
 
         model.addAttribute("bonos", bonos);
-        model.addAttribute("nombreCliente", nombreCliente);
+        model.addAttribute("nombreCliente", clienteDTO.getNombre());
+
         return "cliente/mis-bonos";
     }
 }

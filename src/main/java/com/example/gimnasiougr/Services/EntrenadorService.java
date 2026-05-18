@@ -53,15 +53,32 @@ public class EntrenadorService {
         }
 
         List<Entrenador> entrenadores;
-        if ("dni".equalsIgnoreCase(tipoFiltro)) {
-            entrenadores = entrenadorRepository.findByDniContainingIgnoreCase(textoBusqueda);
-        } else if ("nombre".equalsIgnoreCase(tipoFiltro)) {
-            entrenadores = entrenadorRepository.findByNombreContainingIgnoreCase(textoBusqueda);
-        } else {
-            entrenadores = entrenadorRepository.findAll();
+        String filtroSeguro = (tipoFiltro != null) ? tipoFiltro.toLowerCase() : "";
+
+        switch (filtroSeguro) {
+            case "dni":
+                entrenadores = entrenadorRepository.findByDniContainingIgnoreCase(textoBusqueda);
+                break;
+
+            case "nombre":
+                entrenadores = entrenadorRepository.findByNombreContainingIgnoreCase(textoBusqueda);
+                break;
+
+            default:
+                // Si no tiene filtro mostramos todo
+                entrenadores = entrenadorRepository.findAll();
+                break;
         }
 
-        return entrenadores.stream().map(this::mapToDTO).collect(Collectors.toList());
+        // Convertimos la lista de Entrenadores a DTOs
+        List<EntrenadorDTO> resultadoDTO = new ArrayList<>();
+
+        for (Entrenador entrenador : entrenadores) {
+            EntrenadorDTO dto = this.mapToDTO(entrenador);
+            resultadoDTO.add(dto);
+        }
+
+        return resultadoDTO;
     }
 
     public EntrenadorDTO mapToDTO(Entrenador entrenador) {

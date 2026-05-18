@@ -1,24 +1,14 @@
 package com.example.gimnasiougr.Services;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.example.gimnasiougr.Models.*;
+import com.example.gimnasiougr.Repositories.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.gimnasiougr.Models.Clase;
-import com.example.gimnasiougr.Models.ClaseDTO;
-import com.example.gimnasiougr.Models.Cupo;
-import com.example.gimnasiougr.Models.CupoDTO;
-import com.example.gimnasiougr.Models.TipoClase;
-import com.example.gimnasiougr.Repositories.ClaseRepository;
-import com.example.gimnasiougr.Repositories.DeporteRepository;
-import com.example.gimnasiougr.Repositories.EntrenadorRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +18,9 @@ public class ClaseService {
     private final DeporteRepository deporteRepository;
     private final EntrenadorRepository entrenadorRepository;
     private final CupoService cupoService;
+    private final ClienteRepository clienteRepository;
+    private final CupoRepository cupoRepository;
+    private final BonoRepository bonoRepository;
 
     public List<ClaseDTO> listarTodos() {
         List<ClaseDTO> claseDTOs = new ArrayList<>();
@@ -50,10 +43,9 @@ public class ClaseService {
 
     @Transactional
     public boolean eliminar(Long id) {
+        //Comprobamos si la clase existe
         if (claseRepository.existsById(id)) {
-            claseRepository.findById(id).ifPresent(clase -> {
-                claseRepository.delete(clase);
-            });
+            claseRepository.deleteById(id);
             return true;
         }
         return false;
@@ -64,47 +56,77 @@ public class ClaseService {
             return listarTodos();
         }
 
-        List<Clase> clases;
-        if ("tipo".equalsIgnoreCase(tipoFiltro)) {
-            List<Clase> matchingClases = new ArrayList<>();
-            for (TipoClase t : TipoClase.values()) {
-                if (t.name().equalsIgnoreCase(textoBusqueda) ||
-                        (t.getNombre() != null && t.getNombre().toLowerCase().contains(textoBusqueda.toLowerCase()))) {
-                    matchingClases.addAll(claseRepository.findByTipoOrderByFechaAscHoraAsc(t));
+        List<Clase> clases = new ArrayList<>();
+
+        String filtroSeguro = (tipoFiltro != null) ? tipoFiltro.toLowerCase() : "";
+
+        // Búsqueda con switch
+        switch (filtroSeguro) {
+            case "tipo":
+                String textoMinusculas = textoBusqueda.toLowerCase();
+                for (TipoClase tipoEnum : TipoClase.values()) {
+
+                    boolean coincideNombreEnum = tipoEnum.name().equalsIgnoreCase(textoBusqueda);
+                    boolean tieneNombre = tipoEnum.getNombre() != null;
+                    boolean coincideAtributo = tieneNombre && tipoEnum.getNombre().toLowerCase().contains(textoMinusculas);
+
+                    if (coincideNombreEnum || coincideAtributo) {
+                        clases.addAll(claseRepository.findByTipoOrderByFechaAscHoraAsc(tipoEnum));
+                    }
                 }
-            }
-            clases = matchingClases;
-        } else if ("deporte".equalsIgnoreCase(tipoFiltro)) {
-            clases = claseRepository.findByDeporteNombreContainingIgnoreCase(textoBusqueda);
-        } else if ("entrenador".equalsIgnoreCase(tipoFiltro)) {
-            clases = claseRepository.findByEntrenadorNombreContainingIgnoreCase(textoBusqueda);
-        } else if ("fecha".equalsIgnoreCase(tipoFiltro)) {
-            try {
-                clases = claseRepository.findByFecha(LocalDate.parse(textoBusqueda));
-            } catch (Exception e) {
-                clases = new ArrayList<>();
-            }
-        } else if ("hora".equalsIgnoreCase(tipoFiltro)) {
-            try {
-                clases = claseRepository.findByHora(LocalTime.parse(textoBusqueda));
-            } catch (Exception e) {
-                clases = new ArrayList<>();
-            }
-        } else if ("fechahora".equalsIgnoreCase(tipoFiltro) || "fecha_hora".equalsIgnoreCase(tipoFiltro)) {
-            try {
-                String[] fechaHora = textoBusqueda.split("T| ");
-                LocalDate fecha = LocalDate.parse(fechaHora[0]);
-                LocalTime hora = LocalTime.parse(fechaHora[1]);
-                clases = claseRepository.findByFechaAndHora(fecha, hora);
-            } catch (Exception e) {
-                clases = new ArrayList<>();
-            }
-        } else {
-            clases = claseRepository.findAll();
+                break;
+
+            case "deporte":
+                clases = claseRepository.findByDeporteNombreContainingIgnoreCase(textoBusqueda);
+                break;
+
+            case "entrenador":
+                clases = claseRepository.findByEntrenadorNombreContainingIgnoreCase(textoBusqueda);
+                break;
+
+            default:
+                // Si no tiene filtro, devolvemos todas las clases
+                clases = claseRepository.findAll();
+                break;
         }
-    
-        return clases.stream().map(this::mapToDTO).collect(Collectors.toList());
+
+        // Convertimos a DTO
+        List<ClaseDTO> listaResultadoDTO = new ArrayList<>();
+        for (Clase clase : clases) {
+            ClaseDTO dto = this.mapToDTO(clase);
+            listaResultadoDTO.add(dto);
+        }
+
+        return listaResultadoDTO;
     }
+
+    @Transactional
+    public void addCliente(Long claseId, Long clienteId) {
+
+        Clase clase = claseRepository.findById(claseId).orElseThrow();
+        Cliente cliente = clienteRepository.findById(clienteId).orElseThrow();
+
+        // Buscamos un bono del cliente que aún tenga usos disponibles (max_Cupos > 0)
+        Bono bono = bonoRepository.findFirstByClienteIdAndMaxCuposGreaterThan(clienteId, 0).orElseThrow();
+
+        // Crear y guardar el Cupo
+        Cupo cupo = new Cupo();
+        cupo.setClase(clase);
+        cupo.setCliente(cliente);
+        cupo.setBono(bono);
+        cupo.setEstado(Estado.CONFIRMADO);
+        cupo.setFechaUso(LocalDateTime.now());
+
+        cupoRepository.save(cupo);
+
+    }
+
+    public void removeCliente(Long claseId, Long clienteId) {
+        Cupo cupo = cupoRepository.findByClienteIdAndClaseId(clienteId, claseId)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró la inscripción (cupo) de este cliente en la clase especificada."));
+        cupoRepository.delete(cupo);
+    }
+
 
     public ClaseDTO mapToDTO(Clase clase) {
         if (clase == null) return null;
