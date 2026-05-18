@@ -150,22 +150,29 @@ public class ClaseService {
     @Transactional
     public void addCliente(Long claseId, Long clienteId) {
 
-        Clase clase = claseRepository.findById(claseId).orElseThrow();
-        Cliente cliente = clienteRepository.findById(clienteId).orElseThrow();
+        Clase clase = claseRepository.findById(claseId).orElseThrow(() -> new RuntimeException("Clase no encontrada"));
+        Cliente cliente = clienteRepository.findById(clienteId).orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
-        // Buscamos un bono del cliente que aún tenga usos disponibles (max_Cupos > 0)
-        Bono bono = bonoRepository.findFirstByClienteIdAndMaxCuposGreaterThan(clienteId, 0).orElseThrow();
+        // Llamamos al método que busca SÓLO los bonos de Tipo 1 con usos disponibles
+        List<Bono> bonosValidos = bonoRepository.findBonosTipoUnoValidos(clienteId);
+
+        // Comprobamos que tenga hueco en su bono de tipo 1
+        if (bonosValidos.isEmpty()) {
+            throw new RuntimeException("El cliente no tiene ningún Bono de Tipo 1 con usos disponibles.");
+        }
+
+        // Cogemos el primer bono válido de Tipo 1
+        Bono bonoAUsar = bonosValidos.get(0);
 
         // Crear y guardar el Cupo
         Cupo cupo = new Cupo();
         cupo.setClase(clase);
         cupo.setCliente(cliente);
-        cupo.setBono(bono);
+        cupo.setBono(bonoAUsar); // Se asigna y se consume siempre el bono de Tipo 1
         cupo.setEstado(Estado.CONFIRMADO);
         cupo.setFechaUso(LocalDateTime.now());
 
         cupoRepository.save(cupo);
-
     }
 
     public void removeCliente(Long claseId, Long clienteId) {

@@ -64,28 +64,19 @@ public class AdminClienteController {
     @PostMapping("/guardar")
     public String guardarCliente(
             @Valid @ModelAttribute("cliente") ClienteDTO clienteDTO,
-            BindingResult result,
-            RedirectAttributes redirectAttributes,
-            Model model) {
-
-        if (clienteDTO.getId() == null && (clienteDTO.getContrasenia() == null || clienteDTO.getContrasenia().isBlank())) {
-            result.rejectValue("contrasenia", "error.cliente", "La contraseña es obligatoria para nuevos registros");
-        }
-
-        if (result.hasErrors()) {
-            model.addAttribute("esNuevo", clienteDTO.getId() == null);
-            model.addAttribute("tiposBonos", TipoBono.values());
-            return "admin/cliente-form";
-        }
+            RedirectAttributes redirectAttributes) {
 
         try {
             clienteService.guardar(clienteDTO);
-            redirectAttributes.addFlashAttribute("exito", "Operación realizada correctamente.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al guardar el cliente: " + e.getMessage());
-        }
 
-        return "redirect:/admin/clientes";
+            redirectAttributes.addFlashAttribute("exito", "Cliente guardado correctamente.");
+            return "redirect:/admin/clientes";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error" , e);
+
+            return "redirect:/admin/clientes";
+        }
     }
 
     @GetMapping("/eliminar/{id}")
