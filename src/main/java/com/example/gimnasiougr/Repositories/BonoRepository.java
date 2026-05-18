@@ -31,4 +31,7 @@ public interface BonoRepository extends JpaRepository<Bono, Long> {
     Optional<Bono> findFirstByTipoAndMaxCuposGreaterThanOrderByFechaCompraAsc(TipoBono tipo, int maxCupos);
 
     List<Bono> findByTipoOrderByFechaCompraAsc(TipoBono tipo);
+
+    Optional<Bono> findFirstByClienteIdAndTipo(Long clienteId, TipoBono tipo);
+
 }

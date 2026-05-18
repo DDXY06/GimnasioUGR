@@ -23,7 +23,7 @@ public class ClienteTipo2Controller {
 
     @GetMapping("/clases-tipo2")
     public String misClasesTipo2(Model model) {
-        Usuario usuario = LoginController.usuarioLogeadoGlobal;
+        Usuario usuario = LoginController.clienteLogeadoGlobal;
         if (usuario == null) return "redirect:/";
 
         model.addAttribute("clases", clasesService.obtenerClasesTipo2(usuario.getId()));
@@ -36,7 +36,7 @@ public class ClienteTipo2Controller {
     @PostMapping("/solicitar-tipo2")
     public String solicitarClase(@ModelAttribute ClaseDTO solicitud,
                                  RedirectAttributes redirectAttributes) {
-        Usuario usuario = LoginController.usuarioLogeadoGlobal;
+        Usuario usuario = LoginController.clienteLogeadoGlobal;
         if (usuario == null) return "redirect:/";
 
         try {
