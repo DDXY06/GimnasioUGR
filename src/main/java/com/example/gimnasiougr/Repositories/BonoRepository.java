@@ -16,16 +16,19 @@ public interface BonoRepository extends JpaRepository<Bono, Long> {
     List<Bono> findByFechaCompra(LocalDate fecha);
 
     List<Bono> findByClienteNombreContainingIgnoreCase(String nombreCliente);
-    List<Bono> findByTipoIn(List<com.example.gimnasiougr.Models.TipoBono> tipos);
     List<Bono> findByClienteId(Long clienteId);
 
     boolean existsByClienteIdAndTipo(Long id, TipoBono tipoBono);
 
-    List<Bono> findByTipo(TipoBono tipoCoincidente);
+    List<Bono> findByTipo(TipoBono tipo);
 
     Optional<Bono> findFirstByClienteIdAndMaxCuposGreaterThan(Long clienteId, int maxCupos);
 
     // Consulta para saber si tiene un bono válido
     @Query("SELECT b FROM Bono b WHERE b.cliente.id = :clienteId AND b.tipo = 'UNO' AND b.maxCupos > (SELECT COUNT(c) FROM Cupo c WHERE c.bono.id = b.id)")
     List<Bono> findBonosTipoUnoValidos(@Param("clienteId") Long clienteId);
+
+    Optional<Bono> findFirstByTipoAndMaxCuposGreaterThanOrderByFechaCompraAsc(TipoBono tipo, int maxCupos);
+
+    List<Bono> findByTipoOrderByFechaCompraAsc(TipoBono tipo);
 }

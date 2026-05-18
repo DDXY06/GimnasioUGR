@@ -43,7 +43,7 @@ public class LoginController {
         if (usuario.getRol() == TipoUsuario.ADMINISTRADOR) {
             return "redirect:/admin/index";
         } else if (usuario.getRol() == TipoUsuario.ENTRENADOR) {
-            return "redirect:/entrenador/index";
+            return "redirect:/entrenador";
         } else {
             return "redirect:/cliente/index";
         }

@@ -3,21 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Gestión de Clases - UGRFit</title>
+    <title>Mis Clases - UGRFit</title>
 
     <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <style>
+        .divider-start { border-top: 3px solid #198754; opacity: 1; }
+        .text-primary-trainer { color: #198754 !important; }
+        .bg-primary-trainer { background-color: #198754 !important; }
+    </style>
 </head>
 <body id="page-top" class="bg-light">
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top py-3" id="mainNav">
     <div class="container px-4 px-lg-5">
-        <a class="navbar-brand text-primary fw-bold" th:href="@{/admin/index}">
-            <i class="bi-shield-lock me-2"></i>UGRFit | Panel de Administración
+        <a class="navbar-brand text-primary-trainer fw-bold" th:href="@{/entrenador/index}">
+            <i class="bi-person-badge me-2"></i>UGRFit | Área de Entrenador
         </a>
         <button class="navbar-toggler navbar-toggler-right" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
@@ -27,13 +32,14 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link text-dark" th:href="@{/admin/clientes}">Clientes</a>
+                    <a class="nav-link text-dark" th:href="@{/entrenador/index}">
+                        <i class="bi-house me-1"></i>Inicio
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-primary fw-semibold" th:href="@{/admin/clases/}">Clases</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" th:href="@{/admin/index}">Dashboard</a>
+                    <a class="nav-link text-primary-trainer fw-semibold" th:href="@{/entrenador/clases(id=${entrenador.id})}">
+                        <i class="bi-calendar-check me-1"></i>Mis Clases
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-danger" th:href="@{/logout}">
@@ -51,35 +57,21 @@
         <!-- Cabecera -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="mt-0 mb-1">Gestión de Clases</h2>
-                <p class="text-muted mb-0">Administra las clases programadas en el gimnasio.</p>
-            </div>
-            <div>
-                <a th:href="@{/admin/clases/deporte/nuevo}" class="btn btn-outline-primary rounded-pill px-4 me-2">
-                    <i class="bi-trophy me-2"></i>Añadir Deporte
-                </a>
-                <a th:href="@{/admin/clases/nuevo}" class="btn btn-primary rounded-pill px-4">
-                    <i class="bi-plus-circle me-2"></i>Añadir Clase
-                </a>
+                <h2 class="mt-0 mb-1">Mis Clases</h2>
+                <p class="text-muted mb-0">
+                    Hola,
+                    <strong th:text="${entrenador.nombre}">Entrenador</strong>.
+                    Aquí puedes consultar todas tus clases asignadas.
+                </p>
             </div>
         </div>
         <hr class="divider divider-start mb-5" style="max-width: 5rem; margin-left: 0;" />
 
-        <!-- Mensajes flash -->
-        <div th:if="${exito}" class="alert alert-success alert-dismissible rounded-3 mb-4" role="alert">
-            <i class="bi-check-circle-fill me-2"></i><span th:text="${exito}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <div th:if="${error}" class="alert alert-danger alert-dismissible rounded-3 mb-4" role="alert">
-            <i class="bi-exclamation-triangle-fill me-2"></i><span th:text="${error}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-
-
         <!-- Buscador -->
         <div class="card border-0 shadow-sm mb-4 rounded-4">
             <div class="card-body p-4">
-                <form th:action="@{/admin/clases/}" method="get" class="row g-3 align-items-center">
+                <form th:action="@{/entrenador/clases}" method="get" class="row g-3 align-items-center">
+                    <input type="hidden" name="id" th:value="${entrenador.id}" />
                     <div class="col-auto">
                         <label class="col-form-label fw-bold text-muted">
                             <i class="bi-search me-2"></i>Buscar por:
@@ -89,7 +81,6 @@
                         <select id="tipoFiltroSelect" name="tipoFiltro" class="form-select border-0 bg-light" onchange="actualizarInput()">
                             <option value="tipo" th:selected="${tipoFiltro == 'tipo'}">Tipo</option>
                             <option value="deporte" th:selected="${tipoFiltro == 'deporte'}">Deporte</option>
-                            <option value="entrenador" th:selected="${tipoFiltro == 'entrenador'}">Entrenador</option>
                             <option value="fecha" th:selected="${tipoFiltro == 'fecha'}">Fecha</option>
                             <option value="hora" th:selected="${tipoFiltro == 'hora'}">Hora</option>
                             <option value="fechahora" th:selected="${tipoFiltro == 'fechahora'}">Fecha y Hora</option>
@@ -100,8 +91,8 @@
                                placeholder="Escribe aquí para buscar..." th:value="${textoBusqueda}">
                     </div>
                     <div class="col-auto">
-                        <button type="submit" class="btn btn-primary px-4">Buscar</button>
-                        <a th:href="@{/admin/clases/}" class="btn btn-outline-secondary px-4">Limpiar</a>
+                        <button type="submit" class="btn btn-primary bg-primary-trainer border-0 px-4">Buscar</button>
+                        <a th:href="@{/entrenador/clases(id=${entrenador.id})}" class="btn btn-outline-secondary px-4">Limpiar</a>
                     </div>
                 </form>
             </div>
@@ -116,50 +107,34 @@
                         <th class="py-3 px-4">ID</th>
                         <th class="py-3">Deporte</th>
                         <th class="py-3">Tipo</th>
-                        <th class="py-3">Entrenador</th>
                         <th class="py-3">Fecha</th>
                         <th class="py-3">Hora</th>
                         <th class="py-3">Estado</th>
-                        <th class="py-3">Max Cupos</th>
-                        <th class="py-3 text-center">Acciones</th>
+                        <th class="py-3">Cupos Máx.</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="c : ${clases}">
-                        <td class="px-4 fw-bold text-muted" th:text="${c.id}"></td>
-                        <td th:text="${c.nombreDeporte}"></td>
-                        <td th:text="${c.tipo != null ? c.tipo.nombre : ''}"></td>
-                        <td th:text="${c.nombreEntrenador}"></td>
-                        <td th:text="${c.fecha}"></td>
-                        <td th:text="${c.hora}"></td>
+                    <tr th:each="clase : ${clases}">
+                        <td class="px-4 fw-bold text-muted" th:text="${clase.id}"></td>
+                        <td th:text="${clase.nombreDeporte}"></td>
                         <td>
-                            <span th:class="${c.estado != null && c.estado.name() == 'ACTIVA'} ? 'badge bg-success' : 'badge bg-secondary'"
-                                  th:text="${c.estado}"></span>
+                            <span class="badge rounded-pill px-3 py-2 bg-primary-trainer"
+                                  style="font-size:0.8rem;"
+                                  th:text="${clase.tipo.nombre}">TIPO</span>
                         </td>
-                        <td th:text="${c.maxCupos}"></td>
-                        <td class="text-center">
-                            <a th:if="${c.tipo != null and c.tipo.name() == 'UNO'}"
-                               th:href="@{/admin/clases/{id}/clientes(id=${c.id})}"
-                               class="btn btn-sm btn-info text-dark rounded-pill me-1" title="Gestionar Clientes">
-                                <i class="bi-people"></i> Clientes
-                            </a>
-
-                            <a th:href="@{/admin/clases/editar/{id}(id=${c.id})}"
-                               class="btn btn-sm btn-warning text-dark rounded-pill me-1" title="Editar">
-                                <i class="bi-pencil"></i> Editar
-                            </a>
-
-                            <a th:href="@{/admin/clases/eliminar/{id}(id=${c.id})}"
-                               class="btn btn-sm btn-danger rounded-pill" title="Eliminar"
-                               onclick="return confirm('¿Estás seguro de que deseas eliminar esta clase?');">
-                                <i class="bi-trash"></i>
-                            </a>
+                        <td th:text="${clase.fecha}"></td>
+                        <td th:text="${clase.hora}"></td>
+                        <td>
+                            <span class="badge rounded-pill"
+                                  th:classappend="${clase.estado.name() == 'PROGRAMADA'} ? 'bg-success' : 'bg-secondary'"
+                                  th:text="${clase.estado.name()}">ESTADO</span>
                         </td>
+                        <td th:text="${clase.maxCupos}"></td>
                     </tr>
-                    <tr th:if="${clases.empty}">
-                        <td colspan="9" class="text-center py-5 text-muted">
+                    <tr th:if="${clases == null or clases.empty}">
+                        <td colspan="7" class="text-center py-5 text-muted">
                             <i class="bi-calendar-x fs-3 d-block mb-2"></i>
-                            No se encontraron clases.
+                            No tienes ninguna clase asignada en este momento.
                         </td>
                     </tr>
                     </tbody>
@@ -167,26 +142,29 @@
             </div>
         </div>
 
+        <!-- Volver al panel -->
+        <div class="mt-4">
+            <a th:href="@{/entrenador/index}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="bi-arrow-left me-2"></i>Volver al panel
+            </a>
+        </div>
+
     </div>
 </section>
 
-<!-- Footer-->
+<!-- Footer -->
 <footer class="bg-light py-5">
     <div class="container px-4 px-lg-5">
         <div class="row align-items-center justify-content-center text-center">
-
-            <!-- Contenedor del Logo -->
             <div class="col-12 mb-3">
-                <img th:src="@{/assets/img/UGR-Logo.png}" alt="Logo Universidad de Granada" style="max-height: 70px;" class="img-fluid opacity-75 hover-opacity-100 transition-all">
+                <img th:src="@{/assets/img/UGR-Logo.png}" alt="Logo Universidad de Granada"
+                     style="max-height: 70px;" class="img-fluid opacity-75">
             </div>
-
-            <!-- Texto de Copyright -->
             <div class="col-12">
                 <div class="small text-muted">
                     Copyright &copy; 2026 - UGRFit | El Gimnasio de la Universidad de Granada
                 </div>
             </div>
-
         </div>
     </div>
 </footer>
@@ -197,6 +175,8 @@
     function actualizarInput() {
         const select = document.getElementById('tipoFiltroSelect');
         const input = document.getElementById('textoBusquedaInput');
+        if (!select || !input) return;
+        
         const tipo = select.value;
 
         if (tipo === 'fecha') {
@@ -214,7 +194,6 @@
         }
     }
     
-    // Ejecutar al cargar la página para mantener el tipo correcto si hay búsqueda previa
     document.addEventListener("DOMContentLoaded", actualizarInput);
 </script>
 </body>

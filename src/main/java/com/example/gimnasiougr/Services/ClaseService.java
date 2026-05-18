@@ -1,14 +1,29 @@
 package com.example.gimnasiougr.Services;
 
-import com.example.gimnasiougr.Models.*;
-import com.example.gimnasiougr.Repositories.*;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.gimnasiougr.Models.Bono;
+import com.example.gimnasiougr.Models.Clase;
+import com.example.gimnasiougr.Models.ClaseDTO;
+import com.example.gimnasiougr.Models.Cliente;
+import com.example.gimnasiougr.Models.Cupo;
+import com.example.gimnasiougr.Models.CupoDTO;
+import com.example.gimnasiougr.Models.Estado;
+import com.example.gimnasiougr.Models.TipoClase;
+import com.example.gimnasiougr.Repositories.BonoRepository;
+import com.example.gimnasiougr.Repositories.ClaseRepository;
+import com.example.gimnasiougr.Repositories.ClienteRepository;
+import com.example.gimnasiougr.Repositories.CupoRepository;
+import com.example.gimnasiougr.Repositories.DeporteRepository;
+import com.example.gimnasiougr.Repositories.EntrenadorRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +40,14 @@ public class ClaseService {
     public List<ClaseDTO> listarTodos() {
         List<ClaseDTO> claseDTOs = new ArrayList<>();
         for (Clase clase : claseRepository.findAll()) {
+            claseDTOs.add(mapToDTO(clase));
+        }
+        return claseDTOs;
+    }
+
+    public List<ClaseDTO> buscarClasesTipo2Pendiente() {
+        List<ClaseDTO> claseDTOs = new ArrayList<>();
+        for (Clase clase : claseRepository.findClasesTipo2Pendiente()) {
             claseDTOs.add(mapToDTO(clase));
         }
         return claseDTOs;
@@ -49,6 +72,30 @@ public class ClaseService {
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    public void aceptarClaseTipo2(ClaseDTO claseDTO) {
+        if(claseDTO.getTipo() == TipoClase.DOS){
+            List<Cupo> cupoClase = cupoRepository.findByClaseId(claseDTO.getId());
+            cupoService.aceptarCupoTipo2(cupoClase.getFirst());
+            Clase clase = mapToEntity(claseDTO);
+            clase.setEstado(Estado.CONFIRMADO);
+            claseRepository.save(clase);
+        }
+    }
+
+    @Transactional
+    public void rechazarClaseTipo2(ClaseDTO claseDTO){
+        if(claseDTO.getTipo() == TipoClase.DOS){
+            Optional<Cupo> cupo = cupoRepository.findById(claseDTO.getId());
+            if(cupo.isPresent()){
+                cupoService.rechazarCupoTipo2(cupo.get());
+                Clase clase = mapToEntity(claseDTO);
+                clase.setEstado(Estado.CANCELADO);
+                claseRepository.save(clase);
+            }
+        }
     }
 
     public List<ClaseDTO> buscarPorFiltro(String tipoFiltro, String textoBusqueda) {
