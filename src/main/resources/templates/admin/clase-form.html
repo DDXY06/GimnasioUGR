@@ -197,18 +197,21 @@
     document.addEventListener("DOMContentLoaded", function() {
         const tipoSelect = document.getElementById("tipo");
         const maxCuposContainer = document.getElementById("maxCuposContainer");
+        const maxCuposInput = maxCuposContainer.querySelector("input");
 
         function updateCuposVisibility() {
             if (tipoSelect.value === "TRES") {
                 maxCuposContainer.style.display = "block";
+                maxCuposInput.required = true;
             } else {
                 maxCuposContainer.style.display = "none";
+                maxCuposInput.required = false;
+                maxCuposInput.value = "";
             }
         }
 
-        if(tipoSelect && maxCuposContainer) {
+        if (tipoSelect && maxCuposContainer) {
             tipoSelect.addEventListener("change", updateCuposVisibility);
-            // Ejecutar al cargar la página para establecer el estado inicial
             updateCuposVisibility();
         }
     });
