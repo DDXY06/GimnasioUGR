@@ -1,6 +1,7 @@
 package com.example.gimnasiougr.Services;
 
 import com.example.gimnasiougr.Models.*;
+import com.example.gimnasiougr.Repositories.BonoRepository;
 import com.example.gimnasiougr.Repositories.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final BonoService bonoService;
+    private final BonoRepository bonoRepository;
 
     public List<ClienteDTO> listarTodos() {
         List<ClienteDTO> clienteDTOS = new ArrayList<>();
@@ -88,8 +90,11 @@ public class ClienteService {
         List<ClienteDTO> clientesDTO = new ArrayList<>();
 
         for (Cliente cliente : clientesDisponibles) {
-            ClienteDTO dto = mapToDTO(cliente);
-            clientesDTO.add(dto);
+            // Buscamos si tiene algún bono tipo 1 válido
+            List<Bono> bonosValidos = bonoRepository.findBonosTipoUnoValidos(cliente.getId());
+            if (!bonosValidos.isEmpty()) {
+                clientesDTO.add(mapToDTO(cliente));
+            }
         }
 
         return clientesDTO;

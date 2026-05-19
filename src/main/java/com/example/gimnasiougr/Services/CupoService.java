@@ -1,15 +1,19 @@
 package com.example.gimnasiougr.Services;
 
-import com.example.gimnasiougr.Models.*;
-import com.example.gimnasiougr.Repositories.BonoRepository;
-import com.example.gimnasiougr.Repositories.CupoRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.example.gimnasiougr.Models.Bono;
+import com.example.gimnasiougr.Models.Cupo;
+import com.example.gimnasiougr.Models.CupoDTO;
+import com.example.gimnasiougr.Models.Estado;
+import com.example.gimnasiougr.Repositories.BonoRepository;
+import com.example.gimnasiougr.Repositories.CupoRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +51,7 @@ public class CupoService {
 
     @Transactional
     public void aceptarCupoTipo2(Cupo cupo){
-        List<Bono> bonos = bonoRepository.findByTipoOrderByFechaCompraAsc(TipoBono.DOS);
+        List<Bono> bonos = bonoRepository.findBonosTipoDosValidos(cupo.getCliente().getId());
         for (Bono bono : bonos) {
             long cuposUsados = cupoRepository.countByBonoId(bono.getId());
             if (cuposUsados < bono.getMaxCupos()) {
