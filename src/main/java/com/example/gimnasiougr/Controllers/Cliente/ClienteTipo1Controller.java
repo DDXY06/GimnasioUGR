@@ -20,7 +20,7 @@ public class ClienteTipo1Controller {
     @GetMapping("/clases-tipo1")
     public String clasesTipo1(Model model) {
 
-        Usuario usuario = LoginController.usuarioLogeadoGlobal;
+        Usuario usuario = LoginController.clienteLogeadoGlobal;
         if (usuario == null) return "redirect:/";
 
         model.addAttribute("clases", clasesService.obtenerClasesTipo1ConEstado(usuario.getId()));
@@ -30,7 +30,7 @@ public class ClienteTipo1Controller {
     @PostMapping("/solicitar-cambio")
     public String solicitarCambio(@ModelAttribute SolicitudCambioDTO solicitud,
                                   RedirectAttributes redirectAttributes) {
-        Usuario usuario = LoginController.usuarioLogeadoGlobal;
+        Usuario usuario = LoginController.clienteLogeadoGlobal;
         if (usuario == null) return "redirect:/";
 
         try {

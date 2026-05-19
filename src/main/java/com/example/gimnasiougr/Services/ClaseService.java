@@ -88,9 +88,9 @@ public class ClaseService {
     @Transactional
     public void rechazarClaseTipo2(ClaseDTO claseDTO){
         if(claseDTO.getTipo() == TipoClase.DOS){
-            Optional<Cupo> cupo = cupoRepository.findById(claseDTO.getId());
-            if(cupo.isPresent()){
-                cupoService.rechazarCupoTipo2(cupo.get());
+            List<Cupo> cuposClase = cupoRepository.findByClaseId(claseDTO.getId());
+            if (!cuposClase.isEmpty()) {
+                cupoService.rechazarCupoTipo2(cuposClase.getFirst());
                 Clase clase = mapToEntity(claseDTO);
                 clase.setEstado(Estado.CANCELADO);
                 claseRepository.save(clase);

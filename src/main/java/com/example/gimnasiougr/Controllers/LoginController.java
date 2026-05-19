@@ -17,7 +17,8 @@ import java.util.Optional;
 public class LoginController {
 
     private final UsuarioRepository usuarioRepository;
-    public static Usuario usuarioLogeadoGlobal = null;
+    public static Usuario clienteLogeadoGlobal = null;
+    public static Usuario entrenadorLogeado = null;
 
     @GetMapping("/")
     public String index() {
@@ -38,20 +39,22 @@ public class LoginController {
         }
 
         Usuario usuario = resultado.get();
-        usuarioLogeadoGlobal = usuario;
+
 
         if (usuario.getRol() == TipoUsuario.ADMINISTRADOR) {
             return "redirect:/admin/index";
         } else if (usuario.getRol() == TipoUsuario.ENTRENADOR) {
+            entrenadorLogeado = usuario;
             return "redirect:/entrenador";
         } else {
+            clienteLogeadoGlobal = usuario;
             return "redirect:/cliente/index";
         }
     }
 
     @GetMapping("/logout")
     public String logout() {
-        usuarioLogeadoGlobal = null;
+        clienteLogeadoGlobal = null;
         return "redirect:/";
     }
 }

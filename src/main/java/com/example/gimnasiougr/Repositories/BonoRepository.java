@@ -28,4 +28,5 @@ public interface BonoRepository extends JpaRepository<Bono, Long> {
 
     @Query("SELECT b FROM Bono b WHERE b.cliente.id = :clienteId AND b.tipo = 'DOS' AND b.maxCupos > (SELECT COUNT(c) FROM Cupo c WHERE c.bono.id = b.id)")
     List<Bono> findBonosTipoDosValidos(@Param("clienteId") Long clienteId);
+
 }

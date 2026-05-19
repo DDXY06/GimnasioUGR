@@ -128,10 +128,9 @@ public class ClienteClasesService {
 
         Cliente cliente = clienteRepository.findByUsuarioId(idUsuario)
                 .orElseThrow(() -> new IllegalArgumentException("El usuario no tiene un perfil de cliente asociado."));
-        boolean tieneBonoDos = bonoRepository.existsByClienteIdAndTipo(cliente.getId(), TipoBono.DOS);
-        if (!tieneBonoDos) {
-            throw new IllegalArgumentException("Necesitas un bono de Tipo 2 para solicitar clases individuales.");
-        }
+        Bono bonoDos = bonoRepository.findFirstByClienteIdAndTipo(cliente.getId(), TipoBono.DOS)
+                .orElseThrow(() -> new IllegalArgumentException("Necesitas un bono de Tipo 2 para solicitar clases individuales."));
+
 
 
         Clase nuevaClase = new Clase();
@@ -148,6 +147,7 @@ public class ClienteClasesService {
         Cupo cupo = new Cupo();
         cupo.setCliente(cliente);
         cupo.setClase(nuevaClase);
+        cupo.setBono(bonoDos);
         cupo.setEstado(Estado.PENDIENTE);
         cupo.setFechaUso(LocalDateTime.of(fecha, hora));
 

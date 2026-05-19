@@ -2,7 +2,6 @@ package com.example.gimnasiougr.Controllers.Cliente;
 
 import com.example.gimnasiougr.Controllers.LoginController;
 import com.example.gimnasiougr.Models.*;
-import com.example.gimnasiougr.Repositories.*;
 import com.example.gimnasiougr.Services.ClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,7 +18,7 @@ public class ClienteDefaultController {
 
     @GetMapping({"", "/", "/index"})
     public String index(Model model) {
-        Usuario usuario = LoginController.usuarioLogeadoGlobal;
+        Usuario usuario = LoginController.clienteLogeadoGlobal;
         if (usuario == null) return "redirect:/";
 
         ClienteDTO cliente = clienteService.buscarPorUsuarioId(usuario.getId());

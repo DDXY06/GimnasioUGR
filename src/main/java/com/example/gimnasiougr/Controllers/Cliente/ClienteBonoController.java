@@ -24,7 +24,7 @@ public class ClienteBonoController {
 
     @GetMapping("/mis-bonos")
     public String misBonos(Model model) {
-        Usuario usuario = LoginController.usuarioLogeadoGlobal;
+        Usuario usuario = LoginController.clienteLogeadoGlobal;
         if (usuario == null) {
             return "redirect:/";
         }
