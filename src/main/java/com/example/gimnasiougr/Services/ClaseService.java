@@ -78,10 +78,12 @@ public class ClaseService {
     public void aceptarClaseTipo2(ClaseDTO claseDTO) {
         if(claseDTO.getTipo() == TipoClase.DOS){
             List<Cupo> cupoClase = cupoRepository.findByClaseId(claseDTO.getId());
-            cupoService.aceptarCupoTipo2(cupoClase.getFirst());
-            Clase clase = mapToEntity(claseDTO);
-            clase.setEstado(Estado.CONFIRMADO);
-            claseRepository.save(clase);
+            if (!cupoClase.isEmpty()) {
+                cupoService.aceptarCupoTipo2(cupoClase.getFirst());
+                Clase clase = mapToEntity(claseDTO);
+                clase.setEstado(Estado.CONFIRMADO);
+                claseRepository.save(clase);
+            }
         }
     }
 
