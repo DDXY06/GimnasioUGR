@@ -2,6 +2,7 @@ package com.example.gimnasiougr.Repositories;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +30,5 @@ public interface BonoRepository extends JpaRepository<Bono, Long> {
     @Query("SELECT b FROM Bono b WHERE b.cliente.id = :clienteId AND b.tipo = 'DOS' AND b.maxCupos > (SELECT COUNT(c) FROM Cupo c WHERE c.bono.id = b.id)")
     List<Bono> findBonosTipoDosValidos(@Param("clienteId") Long clienteId);
 
+    Optional<Bono> findFirstByClienteIdAndTipo(Long id, TipoBono tipoBono);
 }
